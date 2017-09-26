@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+
+        <property name="connection.username">wang</property>
+        <property name="connection.password">123</property>
+        <property name="connection.driver_class">oracle.jdbc.driver.OracleDriver</property>
+        <property name="connection.url">jdbc:oracle:thin:@localhost:1521:orcl</property>
+        <property name="dialect">org.hibernate.dialect.Oracle10gDialect</property>
+
+        <!--<property name="connection.username">root</property>-->
+        <!--<property name="connection.password">21436587</property>-->
+        <!--<property name="connection.driver_class">com.mysql.jdbc.Driver</property>-->
+        <!--<property name="connection.url">jdbc:mysql:///guimei_shop?useUnicode=true&amp;characterEncoding=UTF-8</property>-->
+        <!--<property name="dialect">org.hibernate.dialect.MySQLDialect</property>-->
+
+        <property name="show_sql">true</property>
+        <property name="format_sql">true</property>
+        <property name="hbm2ddl.auto">create</property>
+        <property name="connection.pool_size">1</property>
+        <property name="generate_statistics">false</property>
+
+        <mapping class="com.handsome.shop.bean.Customer"/>
+
+    </session-factory>
+
+</hibernate-configuration>
