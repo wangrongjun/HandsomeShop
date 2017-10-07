@@ -1,37 +1,48 @@
 package com.handsome.shop.bean;
 
-import com.wangrg.db2.Id;
-import com.wangrg.db2.Ignore;
-import com.wangrg.db2.Reference;
+import javax.persistence.*;
 
 /**
  * by wangrongjun on 2017/6/16.
  */
+@Entity
 public class Evaluate {
 
-    @Ignore
+    @Transient
     public static final int LEVEL_BAD = 0;
-    @Ignore
+    @Transient
     public static final int LEVEL_NORMAL = 1;
-    @Ignore
+    @Transient
     public static final int LEVEL_GOOD = 2;
 
     @Id
+    @GeneratedValue
     private int evaluateId;
-    @Reference
-    private Orders orders;//Order外键，对某次购物（对应一份订单）的评价
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Orders orders;//Order外键，对某次购物（即一份订单）的评价
     private String content;//评价内容
     private int evaluateLevel;//评价，好评，中评，差评
-    private String time;//评价时间，格式：”yyyy-MM-dd HH:mm:ss”
+    private String createTime;//评价时间，格式：”yyyy-MM-dd HH:mm:ss”
+
+    @Override
+    public String toString() {
+        return "Evaluate{" +
+                "evaluateId=" + evaluateId +
+                ", orders=" + orders +
+                ", content='" + content + '\'' +
+                ", evaluateLevel=" + evaluateLevel +
+                ", createTime='" + createTime + '\'' +
+                '}';
+    }
 
     public Evaluate() {
     }
 
-    public Evaluate(Orders orders, String content, int evaluateLevel, String time) {
+    public Evaluate(Orders orders, String content, int evaluateLevel, String createTime) {
         this.orders = orders;
         this.content = content;
         this.evaluateLevel = evaluateLevel;
-        this.time = time;
+        this.createTime = createTime;
     }
 
     public int getEvaluateId() {
@@ -62,15 +73,15 @@ public class Evaluate {
         return evaluateLevel;
     }
 
-    public void setEvaluateLevel(int evaluateLevel) {
-        this.evaluateLevel = evaluateLevel;
+    public void setEvaluateLevel(int level) {
+        this.evaluateLevel = level;
     }
 
-    public String getTime() {
-        return time;
+    public String getCreateTime() {
+        return createTime;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public void setCreateTime(String time) {
+        this.createTime = time;
     }
 }

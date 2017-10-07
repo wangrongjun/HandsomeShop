@@ -2,14 +2,18 @@ package com.handsome.shop.test;
 
 import com.handsome.shop.bean.*;
 import com.handsome.shop.dao.*;
-import com.wangrg.java_util.GsonUtil;
+import com.handsome.shop.framework.DaoFactory;
+import com.handsome.shop.framework.hibernate.HibernateDao;
+import com.wangrg.java_util.LogUtil;
+import com.wangrg.java_util.MathUtil;
+import org.hibernate.Session;
 import org.junit.Before;
 import org.junit.Test;
 
 /**
  * by wangrongjun on 2017/6/17.
  */
-public class GuiMeiDaoTest {
+public class DaoTest {
 
     private GoodsTypeDao goodsTypeDao;
     private CustomerDao customerDao;
@@ -23,8 +27,76 @@ public class GuiMeiDaoTest {
     private AddressDao addressDao;
 
     @Test
-    public void testGuiMeiDao() {
-        dropTableAndCreate();
+    public void testSession() {
+        HibernateDao.buildSessionFactory();
+        Session session = HibernateDao.getSessionFactory().openSession();
+
+        session.close();
+        HibernateDao.closeSessionFactory();
+    }
+
+    @Test
+    public void testQuery() {
+        HibernateDao.buildSessionFactory();
+
+        LogUtil.printEntity(customerDao.queryByPhone("15521302230"));
+        LogUtil.printEntity(customerDao.countGender());
+
+        LogUtil.printEntity(shopDao.queryAll(), "seller");
+
+        LogUtil.printEntity(goodsTypeDao.queryAll());
+
+        LogUtil.printEntity(shopCarDao.queryCountByCustomerId(25), "customer", "goodsType", "shop", "goodsImageList");
+
+        LogUtil.printEntity(goodsImageDao.queryByGoodsId(17), "goods");
+        LogUtil.printEntity(goodsImageDao.queryAll(), "goods");
+
+        LogUtil.printEntity(goodsDao.queryCountByShopId(13));
+        LogUtil.printEntity(goodsDao.queryByShopId(13, 0, 0), "goodsType", "shop", "goodsImageList");
+        LogUtil.printEntity(goodsDao.queryCountByCustomerId(25));
+        LogUtil.printEntity(goodsDao.queryByCustomerId(25, 0, 0), "goodsType", "shop", "goodsImageList");
+        LogUtil.printEntity(goodsDao.queryCountByGoodsTypeId(1));
+        LogUtil.printEntity(goodsDao.queryByGoodsTypeId(1, 0, 0), "goodsType", "shop", "goodsImageList");
+        LogUtil.printEntity(goodsDao.queryCountBySearchWord("3"));
+        LogUtil.printEntity(goodsDao.queryBySearchWord("3", 0, 0), "goodsType", "shop", "goodsImageList");
+
+        LogUtil.printEntity(ordersDao.queryCountByCustomerId(25));
+        LogUtil.printEntity(ordersDao.queryByCustomerId(25), "customer", "goodsType", "shop", "goodsImageList");
+        LogUtil.printEntity(ordersDao.queryCountByGoodsId(17));
+
+        LogUtil.printEntity(addressDao.queryByCustomerId(25), "customer");
+
+        LogUtil.printEntity(evaluateDao.queryByGoodsId(17));
+
+        HibernateDao.closeSessionFactory();
+    }
+
+    @Test
+    public void testUpdate() {
+        HibernateDao.buildSessionFactory();
+
+        String s = "newHeadUrl: " + MathUtil.random(0, 100);
+        System.out.println(s);
+        customerDao.updateHeadUrl(31, s);
+        Customer customer = customerDao.queryById(31);
+        System.out.println(customer.getHeadUrl());
+
+        HibernateDao.closeSessionFactory();
+    }
+
+    /**
+     * GoodsType  1-10
+     * Seller     11-12
+     * Shop       13-16
+     * Goods      17-24
+     * Customer   25-31
+     * Orders     83-90
+     * Evaluate   91-94
+     * GoodsImage 95-112
+     */
+    @Test
+    public void testInsert() {
+        HibernateDao.buildSessionFactory("create");
 
         GoodsType 电子产品 = new GoodsType("电子产品");
         GoodsType 食品 = new GoodsType("食品");
@@ -75,6 +147,11 @@ public class GuiMeiDaoTest {
 
         customerDao.insert(王荣俊);
         customerDao.insert(沫沫);
+        for (int i = 1; i <= 50; i++) {
+            Customer customer = new Customer("155" + i, "123", "user" + i,
+                    "nick" + i, i % 4 == 0 ? 1 : 0, "img" + i);
+            customerDao.insert(customer);
+        }
 
         shopCarDao.insert(new ShopCar(王荣俊, iPhone7手机));
         shopCarDao.insert(new ShopCar(王荣俊, 苹果笔记本));
@@ -140,51 +217,7 @@ public class GuiMeiDaoTest {
             goodsImageDao.insert(goodsImage);
         }
 
-        GsonUtil.printFormatJson(customerDao.query("15521302230", "123"));
-        GsonUtil.printFormatJson(goodsImageDao.queryByGoodsId(1));
-        GsonUtil.printFormatJson(goodsImageDao.queryByGoodsId(2));
-        GsonUtil.printFormatJson(goodsDao.queryByShopId(1, 0, 0));
-        GsonUtil.printFormatJson(goodsDao.queryAll());
-        GsonUtil.printFormatJson(ordersDao.queryById(1));
-        GsonUtil.printFormatJson(addressDao.queryAll());
-        GsonUtil.printFormatJson(goodsDao.queryByCustomerId(1, 0, 0));
-        GsonUtil.printFormatJson(evaluateDao.queryByGoodsId(1));
-        GsonUtil.printFormatJson(goodsDao.queryAll());
-
-    }
-
-    private void dropTableAndCreate() {
-        addressDao.dropTable();
-        evaluateDao.dropTable();
-        shopCarDao.dropTable();
-        ordersDao.dropTable();
-        goodsImageDao.dropTable();
-        goodsDao.dropTable();
-        shopDao.dropTable();
-        sellerDao.dropTable();
-        customerDao.dropTable();
-        goodsTypeDao.dropTable();
-
-        goodsTypeDao.createTable();
-        customerDao.createTable();
-        sellerDao.createTable();
-        shopDao.createTable();
-        goodsDao.createTable();
-        goodsImageDao.createTable();
-        ordersDao.createTable();
-        shopCarDao.createTable();
-        evaluateDao.createTable();
-        addressDao.createTable();
-
-        sellerDao.createForeignKey();
-        shopDao.createForeignKey();
-        goodsDao.createForeignKey();
-        goodsImageDao.createForeignKey();
-        ordersDao.createForeignKey();
-        shopCarDao.createForeignKey();
-        evaluateDao.createForeignKey();
-        addressDao.createForeignKey();
-
+        HibernateDao.closeSessionFactory();
     }
 
     @Before

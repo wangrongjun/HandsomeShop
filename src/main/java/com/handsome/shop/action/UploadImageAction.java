@@ -2,7 +2,7 @@ package com.handsome.shop.action;
 
 import com.handsome.shop.bean.Customer;
 import com.handsome.shop.dao.CustomerDao;
-import com.handsome.shop.dao.DaoFactory;
+import com.handsome.shop.framework.DaoFactory;
 import com.handsome.shop.framework.ActionSupport;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadBase;

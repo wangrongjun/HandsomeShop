@@ -3,7 +3,7 @@ package com.handsome.shop.action;
 import com.handsome.shop.bean.Customer;
 import com.handsome.shop.bean.Seller;
 import com.handsome.shop.dao.CustomerDao;
-import com.handsome.shop.dao.DaoFactory;
+import com.handsome.shop.framework.DaoFactory;
 import com.handsome.shop.dao.SellerDao;
 import com.handsome.shop.framework.ActionSupport;
 import com.wangrg.web_lib.util.ImageCode;
@@ -35,8 +35,8 @@ public class LoginAction extends ActionSupport {
 
         if (identity.equals("customer")) {// 如果是客户登录
             CustomerDao customerDao = DaoFactory.getCustomerDao();
-            Customer customer = customerDao.query(phone, password);
-            if (customer != null) {
+            Customer customer = customerDao.queryByPhone(phone);
+            if (customer != null && password.equals(customer.getPassword())) {
                 request.getSession().invalidate();
                 request.getSession().setAttribute("customer", customer);
                 addCookie(phone, password, "customer", autoLogin);
@@ -47,8 +47,8 @@ public class LoginAction extends ActionSupport {
             }
         } else {// 如果是商家登录
             SellerDao sellerDao = DaoFactory.getSellerDao();
-            Seller seller = sellerDao.query(phone, password);
-            if (seller != null) {
+            Seller seller = sellerDao.queryByPhone(phone);
+            if (seller != null && password.equals(seller.getPassword())) {
                 request.getSession().invalidate();
                 request.getSession().setAttribute("seller", seller);
                 addCookie(phone, phone, password, "seller");

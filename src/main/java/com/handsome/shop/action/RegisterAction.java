@@ -3,7 +3,7 @@ package com.handsome.shop.action;
 import com.handsome.shop.bean.Customer;
 import com.handsome.shop.bean.Seller;
 import com.handsome.shop.dao.CustomerDao;
-import com.handsome.shop.dao.DaoFactory;
+import com.handsome.shop.framework.DaoFactory;
 import com.handsome.shop.dao.SellerDao;
 import com.handsome.shop.framework.ActionSupport;
 
@@ -25,7 +25,7 @@ public class RegisterAction extends ActionSupport {
 
         if (identity.equals("customer")) {
             CustomerDao customerDao = DaoFactory.getCustomerDao();
-            if (customerDao.queryExists(phone)) {
+            if (customerDao.queryByPhone(phone) != null) {
                 request.setAttribute("msg", "该手机号已注册");
                 return "register.jsp";
             }
@@ -39,7 +39,7 @@ public class RegisterAction extends ActionSupport {
         } else {
 
             SellerDao sellerDao = DaoFactory.getSellerDao();
-            if (sellerDao.queryExists(phone)) {
+            if (sellerDao.queryByPhone(phone)!=null) {
                 request.setAttribute("msg", "该手机号已注册");
                 return "register.jsp";
             }

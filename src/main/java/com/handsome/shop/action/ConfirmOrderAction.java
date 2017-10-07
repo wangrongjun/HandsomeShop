@@ -4,7 +4,7 @@ import com.handsome.shop.bean.Address;
 import com.handsome.shop.bean.Customer;
 import com.handsome.shop.bean.Goods;
 import com.handsome.shop.dao.AddressDao;
-import com.handsome.shop.dao.DaoFactory;
+import com.handsome.shop.framework.DaoFactory;
 import com.handsome.shop.dao.GoodsDao;
 import com.handsome.shop.framework.ActionSupport;
 

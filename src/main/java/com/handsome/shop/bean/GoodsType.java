@@ -1,16 +1,20 @@
 package com.handsome.shop.bean;
 
-import com.wangrg.db2.Column;
-import com.wangrg.db2.Id;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 
 /**
  * by wangrongjun on 2017/6/18.
  */
+@Entity
 public class GoodsType {
 
     @Id
+    @GeneratedValue
     private int goodsTypeId;
-    @Column(length = 50, nullable = false, unique = true)
+    @Column(nullable = false, unique = true)
     private String name;
 
     public GoodsType() {

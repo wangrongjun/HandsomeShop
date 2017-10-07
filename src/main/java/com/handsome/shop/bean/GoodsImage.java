@@ -1,20 +1,26 @@
 package com.handsome.shop.bean;
 
-import com.wangrg.db2.Id;
-import com.wangrg.db2.Reference;
+import javax.persistence.*;
 
 /**
  * by wangrongjun on 2017/6/16.
  */
+@Entity
 public class GoodsImage {
 
     @Id
+    @GeneratedValue
     private int imageId;
-    @Reference
+    @ManyToOne(fetch = FetchType.LAZY)
     private Goods goods;//外键，该图片所属的商品。查询时不必给该变量赋值。
     private String imageUrl;
 
     public GoodsImage() {
+    }
+
+    public GoodsImage(int imageId, String imageUrl) {
+        this.imageId = imageId;
+        this.imageUrl = imageUrl;
     }
 
     public GoodsImage(Goods goods, String imageUrl) {

@@ -1,7 +1,7 @@
 package com.handsome.shop.dao;
 
 import com.handsome.shop.bean.Evaluate;
-import com.wangrg.db2.Dao;
+import com.handsome.shop.framework.hibernate.Dao;
 
 import java.util.List;
 

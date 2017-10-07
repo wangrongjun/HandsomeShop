@@ -1,16 +1,17 @@
 package com.handsome.shop.bean;
 
-import com.wangrg.db2.Id;
-import com.wangrg.db2.Reference;
+import javax.persistence.*;
 
 /**
  * by wangrongjun on 2017/6/16.
  */
+@Entity
 public class Shop {
 
     @Id
+    @GeneratedValue
     private int shopId;
-    @Reference
+    @ManyToOne(fetch = FetchType.LAZY)
     private Seller seller;
     private String shopName;
     private String description;

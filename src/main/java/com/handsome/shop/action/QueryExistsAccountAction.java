@@ -1,7 +1,7 @@
 package com.handsome.shop.action;
 
 import com.handsome.shop.dao.CustomerDao;
-import com.handsome.shop.dao.DaoFactory;
+import com.handsome.shop.framework.DaoFactory;
 import com.handsome.shop.framework.ActionSupport;
 
 import javax.servlet.ServletException;
@@ -17,7 +17,7 @@ public class QueryExistsAccountAction extends ActionSupport {
             ServletException, IOException, ParamErrorException, CustomerNotExistsException {
         String phone = checkStringParameter("phone");
         CustomerDao customerDao = DaoFactory.getCustomerDao();
-        boolean exists = customerDao.queryExists(phone);
+        boolean exists = customerDao.queryByPhone(phone) != null;
         response.getWriter().write(String.valueOf(exists));
         return null;
     }

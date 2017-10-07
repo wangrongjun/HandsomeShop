@@ -1,36 +1,34 @@
 package com.handsome.shop.bean;
 
-import com.wangrg.db2.Id;
-import com.wangrg.db2.Ignore;
-import com.wangrg.db2.Reference;
 
+import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 /**
  * by wangrongjun on 2017/6/16.
  */
+@Entity
 public class Goods {
 
     // TODO 加一个字段：firstImage，那么在查询商品列表时，就不用为每个商品查询图片列表。适当的冗余可以极大地提高效率。
     // TODO 加一个字段：sellCount，那么在查询商品列表时，就不用为每个商品查询总销量。适当的冗余可以极大地提高效率。
 
-    @Ignore
-    private List<GoodsImage> goodsImageList;
-    @Ignore
+    @Transient
     private int sellCount;
 
     @Id
+    @GeneratedValue
     private int goodsId;
     private String goodsName;
     private String description;
-    /**
-     * 库存
-     */
-    private int remainCount;
-    @Reference
+    private int remainCount;// 库存
+    @ManyToOne(fetch = FetchType.LAZY)
     private GoodsType goodsType;
-    @Reference
+    @ManyToOne(fetch = FetchType.LAZY)
     private Shop shop;//Shop外键，所属的商店
+    @OneToMany
+    private List<GoodsImage> goodsImageList;
     private double price;
 
     public Goods() {
@@ -38,6 +36,14 @@ public class Goods {
 
     public Goods(int goodsId) {
         this.goodsId = goodsId;
+    }
+
+    public Goods(String goodsName, String description, int remainCount, GoodsType goodsType, double price) {
+        this.goodsName = goodsName;
+        this.description = description;
+        this.remainCount = remainCount;
+        this.goodsType = goodsType;
+        this.price = price;
     }
 
     public Goods(String goodsName, String description, int remainCount, GoodsType goodsType, Shop shop, double price) {
@@ -120,4 +126,5 @@ public class Goods {
     public void setSellCount(int sellCount) {
         this.sellCount = sellCount;
     }
+
 }

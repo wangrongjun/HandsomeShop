@@ -3,8 +3,8 @@ package com.handsome.shop.action;
 import com.handsome.shop.bean.Address;
 import com.handsome.shop.bean.Customer;
 import com.handsome.shop.dao.AddressDao;
-import com.handsome.shop.dao.DaoFactory;
 import com.handsome.shop.framework.ActionSupport;
+import com.handsome.shop.framework.DaoFactory;
 
 import javax.servlet.ServletException;
 import java.io.IOException;

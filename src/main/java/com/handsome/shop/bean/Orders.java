@@ -1,26 +1,29 @@
 package com.handsome.shop.bean;
 
-import com.wangrg.db2.Id;
-import com.wangrg.db2.Ignore;
-import com.wangrg.db2.Reference;
+
+import javax.persistence.*;
 
 /**
  * by wangrongjun on 2017/6/16.
  */
+@Entity
 public class Orders {
 
-    @Ignore
-    public static final int STATE_CONTINUTE = 0;
-    @Ignore
+    // TODO 订单应该有商品名称，下单时的价格，而且goods可为空，代表商品下架
+
+    @Transient
+    public static final int STATE_CONTINUE = 0;
+    @Transient
     public static final int STATE_SUCCEED = 1;
-    @Ignore
+    @Transient
     public static final int STATE_FAILED = 2;
 
     @Id
+    @GeneratedValue
     private int ordersId;
-    @Reference
+    @ManyToOne(fetch = FetchType.LAZY)
     private Customer customer;
-    @Reference
+    @ManyToOne
     private Goods goods;
     private int buyCount;//该商品购买的数量
     private double price;//订单创建时商品的总价格（预防下单后商家修改该商品的价格导致出错）
@@ -29,6 +32,22 @@ public class Orders {
     private String address;//收货人的收货地址（预防下单后客户修改收货地址导致出错）
     private String createTime;//订单创建时间，格式：”yyyy-MM-dd HH:mm:ss”
     private int state;//订单状态，进行中，关闭，成功
+
+    @Override
+    public String toString() {
+        return "Orders{" +
+                "ordersId=" + ordersId +
+                ", customer=" + customer +
+                ", goods=" + goods +
+                ", buyCount=" + buyCount +
+                ", price=" + price +
+                ", phone='" + phone + '\'' +
+                ", receiverName='" + receiverName + '\'' +
+                ", address='" + address + '\'' +
+                ", createTime='" + createTime + '\'' +
+                ", state=" + state +
+                '}';
+    }
 
     public Orders() {
     }

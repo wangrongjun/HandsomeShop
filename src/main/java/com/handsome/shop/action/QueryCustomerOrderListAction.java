@@ -2,7 +2,7 @@ package com.handsome.shop.action;
 
 import com.handsome.shop.bean.Customer;
 import com.handsome.shop.bean.Orders;
-import com.handsome.shop.dao.DaoFactory;
+import com.handsome.shop.framework.DaoFactory;
 import com.handsome.shop.dao.OrdersDao;
 import com.handsome.shop.framework.ActionSupport;
 

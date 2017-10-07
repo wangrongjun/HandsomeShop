@@ -1,18 +1,23 @@
 package com.handsome.shop.bean;
 
-import com.wangrg.db2.Id;
-import com.wangrg.db2.Reference;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 /**
  * by wangrongjun on 2017/6/16.
  */
+@Entity
 public class ShopCar {
 
     @Id
+    @GeneratedValue
     private int carId;
-    @Reference
+    @ManyToOne
     private Customer customer;
-    @Reference
+    @ManyToOne
     private Goods goods;
 
     public ShopCar() {

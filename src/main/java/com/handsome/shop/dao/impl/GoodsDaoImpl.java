@@ -1,41 +1,17 @@
 package com.handsome.shop.dao.impl;
 
 import com.handsome.shop.bean.Goods;
-import com.handsome.shop.dao.DaoFactory;
 import com.handsome.shop.dao.GoodsDao;
-import com.handsome.shop.dao.GoodsImageDao;
-import com.handsome.shop.dao.OrdersDao;
-import com.handsome.shop.framework.GuiMeiDao;
-import com.wangrg.db2.Query;
-import com.wangrg.db2.Where;
+import com.handsome.shop.framework.hibernate.HibernateDao;
+import com.handsome.shop.framework.hibernate.Q;
+import com.handsome.shop.framework.hibernate.Where;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
  * by wangrongjun on 2017/6/17.
  */
-public class GoodsDaoImpl extends GuiMeiDao<Goods> implements GoodsDao {
-    @Override
-    protected Class<Goods> getEntityClass() {
-        return Goods.class;
-    }
-
-    @Override
-    protected List<Goods> executeQuery(String sql, int maxQueryForeignKeyLevel,
-                                       List<String> ignoreReferenceList,
-                                       List<String> requiredReferenceVariableList) {
-        List<Goods> goodsList = super.executeQuery(sql, maxQueryForeignKeyLevel,
-                ignoreReferenceList, requiredReferenceVariableList);
-
-        GoodsImageDao goodsImageDao = DaoFactory.getGoodsImageDao();
-        OrdersDao ordersDao = DaoFactory.getOrdersDao();
-        for (Goods goods : goodsList) {
-            goods.setGoodsImageList(goodsImageDao.queryByGoodsId(goods.getGoodsId()));
-            goods.setSellCount(ordersDao.queryCountByGoodsId(goods.getGoodsId()));
-        }
-        return goodsList;
-    }
+public class GoodsDaoImpl extends HibernateDao<Goods> implements GoodsDao {
 
     private int begin = 0;
     private int count = 0;
@@ -75,14 +51,13 @@ public class GoodsDaoImpl extends GuiMeiDao<Goods> implements GoodsDao {
 
     @Override
     public int queryCountByShopId(int shopId) {
-        Where where = Where.build("shop", shopId + "");
-        return queryCount(where);
+        return queryCount(Where.eq("shop.id", shopId));
     }
 
     @Override
     public List<Goods> queryByShopId(int shopId, int begin, int count) {
-        Where where = Where.build("shop", shopId + "");
-        return query(Query.build(where).maxQueryForeignKeyLevel(0).limit(begin, count));
+        Q q = Q.where(Where.eq("shop.id", shopId)).limit(begin, count);
+        return query(q);
     }
 
     @Override
@@ -94,60 +69,42 @@ public class GoodsDaoImpl extends GuiMeiDao<Goods> implements GoodsDao {
     @Override
     public List<Goods> queryBySearchWord(String searchWord, int begin, int count) {
         Where where = new Where().like("goodsName", "%" + searchWord + "%");
-        return query(Query.build(where).limit(begin, count).maxQueryForeignKeyLevel(0));
+        return query(Q.where(where).limit(begin, count));
     }
 
     @Override
     public int queryCountByGoodsTypeId(int goodsTypeId) {
-        Where where = Where.build("goodsType", goodsTypeId + "");
-        return queryCount(where);
+        return queryCount(Where.eq("goodsType.id", String.valueOf(goodsTypeId)));
     }
 
     @Override
     public List<Goods> queryByGoodsTypeId(int goodsTypeId, int begin, int count) {
-        Where where = Where.build("goodsType", goodsTypeId + "");
-        return query(Query.build(where).limit(begin, count).maxQueryForeignKeyLevel(0));
+        Where where = Where.eq("goodsType.id", String.valueOf(goodsTypeId));
+        return query(Q.where(where).limit(begin, count));
     }
 
     @Override
     public List<Goods> queryAll() {
-        //TODO 修改java_lib
         String sortType = getOrderByWordFromSortType(this.sortType);
-        if (sortType == null) {
-            return query(Query.build(null).
-                    maxQueryForeignKeyLevel(0).
-                    limit(begin, count));
-        } else {
-            return query(Query.build(null).
-                    maxQueryForeignKeyLevel(0).
-                    limit(begin, count).
-                    orderBy(sortType));
-        }
+        return query(new Q().limit(begin, count).orderBy(sortType));
     }
 
     @Override
     public int queryCountByCustomerId(int customerId) {
-        String sql = "select count(*) from Goods,ShopCar" +
-                " where " +
-                "Goods.goodsId=ShopCar.goods" +
-                " and " +
-                "ShopCar.customer='" + customerId + "';";
-        long count = executeQueryCount(sql);
-        return (int) count;
+        String hql = "select count(*) from Goods g " +
+                "join ShopCar c " +
+                "on c.goods=g " +
+                "and c.customer.id=" + customerId;
+        return executeQueryCount(hql);
     }
 
     @Override
-    public List<Goods> queryByCustomerId(int customerId, int begin, int count) {
-        String sql = "select Goods.* from Goods,ShopCar" +
-                " where " +
-                "Goods.goodsId=ShopCar.goods" +
-                " and " +
-                "ShopCar.customer='" + customerId + "'";
-        if (count > 0 && begin >= 0) {
-            sql += " limit " + begin + "," + count;
-        }
-        sql += ";";
-        return executeQuery(sql, 0, Collections.singletonList("shop"), null);
+    public List<Goods> queryByCustomerId(int customerId, int offset, int rowCount) {
+        String hql = "select g from Goods g " +
+                "join ShopCar c " +
+                "on c.goods=g " +
+                "and c.customer.id=" + customerId;
+        return executeQuery(hql, offset, rowCount);
     }
 
 }

@@ -1,5 +1,5 @@
 <%@ page import="com.handsome.shop.bean.Customer" %>
-<%@ page import="com.handsome.shop.dao.DaoFactory" %>
+<%@ page import="com.handsome.shop.framework.DaoFactory" %>
 <%@ page import="com.handsome.shop.dao.OrdersDao" %>
 <%@ page import="com.handsome.shop.dao.ShopCarDao" %>
 <%--

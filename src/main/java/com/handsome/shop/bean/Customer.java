@@ -1,11 +1,7 @@
 package com.handsome.shop.bean;
 
-import com.wangrg.db2.Column;
-import com.wangrg.db2.Id;
-import com.wangrg.db2.Ignore;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
+import javax.persistence.*;
 
 /**
  * by wangrongjun on 2017/6/16.
@@ -13,23 +9,33 @@ import javax.persistence.GeneratedValue;
 @Entity
 public class Customer {
 
-    @Ignore
+    @Transient
     public static final int GENDER_WOMAN = 0;
-    @Ignore
+    @Transient
     public static final int GENDER_MAN = 1;
 
     @Id
-    @javax.persistence.Id
     @GeneratedValue
     private int customerId;
-    @Column(length = 20, nullable = false, unique = true)
     private String phone;
-    @Column(nullable = false)
     private String password;
     private String realName;
     private String nickname;
     private int gender;
     private String headUrl;
+
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "customerId=" + customerId +
+                ", phone='" + phone + '\'' +
+                ", password='" + password + '\'' +
+                ", realName='" + realName + '\'' +
+                ", nickname='" + nickname + '\'' +
+                ", gender=" + gender +
+                ", headUrl='" + headUrl + '\'' +
+                '}';
+    }
 
     public Customer() {
     }

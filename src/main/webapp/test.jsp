@@ -6,29 +6,15 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
     <title>Title</title>
 </head>
 <body>
-<%
-    System.out.println("getContextPath: " + request.getContextPath());
-    System.out.println("getServletPath: " + request.getServletPath());
-    System.out.println("getServletContext().getRealPath(\"a\"): " + request.getServletContext().getRealPath("a"));
-    System.out.println("getServletContext().getRealPath(\"\\\"): " + request.getServletContext().getRealPath("\\"));
-    System.out.println("getServletContext().getRealPath(\"\\a\"): " + request.getServletContext().getRealPath("\\a"));
-    System.out.println("getServletContext().getRealPath(\"/\"): " + request.getServletContext().getRealPath("/"));
-    System.out.println("getServletContext().getRealPath(\"/a\"): " + request.getServletContext().getRealPath("/a"));
-    System.out.println("getServletContext().getContextPath(): " + request.getServletContext().getContextPath());
-    System.out.println("getServletContext().getContext(\"a\"): " + request.getServletContext().getContext("a"));
-
-    Cookie[] cookies = request.getCookies();
-    for (Cookie cookie : cookies) {
-        String value = cookie.getValue();
-    }
-%>
-<form action="">
-    <input type="time">
+<form action="test" method="post" enctype="multipart/form-data">
+    <input type="file" name="uploadFile">
+    <input type="submit" value="上传">
 </form>
 </body>
 </html>

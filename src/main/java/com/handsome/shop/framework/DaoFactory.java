@@ -1,5 +1,6 @@
-package com.handsome.shop.dao;
+package com.handsome.shop.framework;
 
+import com.handsome.shop.dao.*;
 import com.handsome.shop.dao.impl.*;
 
 /**

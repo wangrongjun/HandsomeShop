@@ -1,7 +1,7 @@
 package com.handsome.shop.dao;
 
 import com.handsome.shop.bean.Goods;
-import com.wangrg.db2.Dao;
+import com.handsome.shop.framework.hibernate.Dao;
 
 import java.util.List;
 
@@ -45,11 +45,6 @@ public interface GoodsDao extends Dao<Goods> {
      * 按照按照商品类型id分页查询，用户按照商品类型搜索商品时使用该方法
      */
     List<Goods> queryByGoodsTypeId(int goodsTypeId, int begin, int count);
-
-    /**
-     * 需要实现分页和按条件排序，用户浏览商品时使用该方法
-     */
-    List<Goods> queryAll();
 
     /**
      * 查询某个用户的购物车下的所有商品的数量，用于分页

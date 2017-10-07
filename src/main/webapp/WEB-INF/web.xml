@@ -5,7 +5,9 @@
          version="3.1">
 
     <welcome-file-list>
-        <welcome-file>index.jsp</welcome-file>
+        <welcome-file>/chart.jsp</welcome-file>
+        <!--<welcome-file>seller/showGoodsImage.jsp</welcome-file>-->
+        <!--<welcome-file>index.jsp</welcome-file>-->
     </welcome-file-list>
 
     <servlet>
@@ -16,6 +18,29 @@
         <servlet-name>Controller</servlet-name>
         <url-pattern>*.do</url-pattern>
     </servlet-mapping>
+
+
+    <servlet>
+        <servlet-name>DisplayChart</servlet-name>
+        <servlet-class>org.jfree.chart.servlet.DisplayChart</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DisplayChart</servlet-name>
+        <url-pattern>/Admin/DisplayChart</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>Test</servlet-name>
+        <servlet-class>com.handsome.shop.test.TestServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Test</servlet-name>
+        <url-pattern>/test</url-pattern>
+    </servlet-mapping>
+
+    <listener>
+        <listener-class>com.handsome.shop.listener.HibernateInitAndDestroyListener</listener-class>
+    </listener>
 
     <filter>
         <filter-name>CharsetFilter</filter-name>
