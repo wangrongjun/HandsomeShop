@@ -1,8 +1,0 @@
-@startuml
-
-(*) --> 登录页面
-if "Cookie中存在帐户信息" then
---> [a] 自动登录
-else --> [cc] fvd
-
-@enduml
