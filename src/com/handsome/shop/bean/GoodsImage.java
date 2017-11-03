@@ -10,7 +10,7 @@ public class GoodsImage {
 
     @Id
     @GeneratedValue
-    private int imageId;
+    private Integer imageId;
     @ManyToOne(fetch = FetchType.LAZY)
     private Goods goods;//外键，该图片所属的商品。查询时不必给该变量赋值。
     private String imageUrl;
@@ -18,21 +18,16 @@ public class GoodsImage {
     public GoodsImage() {
     }
 
-    public GoodsImage(int imageId, String imageUrl) {
-        this.imageId = imageId;
-        this.imageUrl = imageUrl;
-    }
-
     public GoodsImage(Goods goods, String imageUrl) {
         this.goods = goods;
         this.imageUrl = imageUrl;
     }
 
-    public int getImageId() {
+    public Integer getImageId() {
         return imageId;
     }
 
-    public void setImageId(int imageId) {
+    public void setImageId(Integer imageId) {
         this.imageId = imageId;
     }
 

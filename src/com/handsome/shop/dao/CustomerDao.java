@@ -1,7 +1,7 @@
 package com.handsome.shop.dao;
 
 import com.handsome.shop.bean.Customer;
-import com.handsome.shop.domain.GenderReport;
+import com.handsome.shop.bean.view.GenderReport;
 import com.wangrj.java_lib.hibernate.Dao;
 
 import java.util.List;

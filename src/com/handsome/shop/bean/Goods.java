@@ -3,7 +3,6 @@ package com.handsome.shop.bean;
 
 import javax.persistence.*;
 import java.util.List;
-import java.util.Set;
 
 /**
  * by wangrongjun on 2017/6/16.
@@ -11,55 +10,54 @@ import java.util.Set;
 @Entity
 public class Goods {
 
-    // TODO 加一个字段：firstImage，那么在查询商品列表时，就不用为每个商品查询图片列表。适当的冗余可以极大地提高效率。
-    // TODO 加一个字段：sellCount，那么在查询商品列表时，就不用为每个商品查询总销量。适当的冗余可以极大地提高效率。
-
     @Transient
-    private int sellCount;
+    private Integer sellCount;
 
     @Id
     @GeneratedValue
-    private int goodsId;
+    private Integer goodsId;
     private String goodsName;
     private String description;
-    private int remainCount;// 库存
+    private Integer remainCount;// 库存
     @ManyToOne(fetch = FetchType.LAZY)
-    private GoodsType goodsType;
+    private GoodsCategory goodsCategory;
     @ManyToOne(fetch = FetchType.LAZY)
     private Shop shop;//Shop外键，所属的商店
     @OneToMany
     private List<GoodsImage> goodsImageList;
     private double price;
+    @OneToMany
+    private List<AttrName> attrNameList;
 
     public Goods() {
     }
 
-    public Goods(int goodsId) {
+    public Goods(Integer goodsId) {
         this.goodsId = goodsId;
     }
 
-    public Goods(String goodsName, String description, int remainCount, GoodsType goodsType, double price) {
+    public Goods(String goodsName, String description, Integer remainCount, GoodsCategory goodsCategory, double price) {
         this.goodsName = goodsName;
         this.description = description;
         this.remainCount = remainCount;
-        this.goodsType = goodsType;
+        this.goodsCategory = goodsCategory;
         this.price = price;
     }
 
-    public Goods(String goodsName, String description, int remainCount, GoodsType goodsType, Shop shop, double price) {
+    public Goods(String goodsName, String description, Integer remainCount, GoodsCategory goodsCategory, Shop shop, double price) {
         this.goodsName = goodsName;
         this.description = description;
         this.remainCount = remainCount;
-        this.goodsType = goodsType;
+        this.goodsCategory = goodsCategory;
         this.shop = shop;
         this.price = price;
     }
 
-    public int getGoodsId() {
+    public Integer getGoodsId() {
         return goodsId;
     }
 
-    public void setGoodsId(int goodsId) {
+    public void setGoodsId(Integer goodsId) {
         this.goodsId = goodsId;
     }
 
@@ -103,28 +101,35 @@ public class Goods {
         this.goodsImageList = goodsImageList;
     }
 
-    public GoodsType getGoodsType() {
-        return goodsType;
+    public GoodsCategory getGoodsCategory() {
+        return goodsCategory;
     }
 
-    public void setGoodsType(GoodsType goodsType) {
-        this.goodsType = goodsType;
+    public void setGoodsCategory(GoodsCategory goodsCategory) {
+        this.goodsCategory = goodsCategory;
     }
 
-    public int getRemainCount() {
+    public Integer getRemainCount() {
         return remainCount;
     }
 
-    public void setRemainCount(int remainCount) {
+    public void setRemainCount(Integer remainCount) {
         this.remainCount = remainCount;
     }
 
-    public int getSellCount() {
+    public Integer getSellCount() {
         return sellCount;
     }
 
-    public void setSellCount(int sellCount) {
+    public void setSellCount(Integer sellCount) {
         this.sellCount = sellCount;
     }
 
+    public List<AttrName> getAttrNameList() {
+        return attrNameList;
+    }
+
+    public void setAttrNameList(List<AttrName> attrNameList) {
+        this.attrNameList = attrNameList;
+    }
 }

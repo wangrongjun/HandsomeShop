@@ -11,24 +11,27 @@ public class Address {
 
     @Id
     @GeneratedValue
-    private int addressId;
+    private Integer addressId;
     @ManyToOne(fetch = FetchType.LAZY)
     private Customer customer;
-    private String address;
+    @ManyToOne
+    private Area area;
+    private String street;
 
     public Address() {
     }
 
-    public Address(Customer customer, String address) {
+    public Address(Customer customer, Area area, String street) {
         this.customer = customer;
-        this.address = address;
+        this.area = area;
+        this.street = street;
     }
 
-    public int getAddressId() {
+    public Integer getAddressId() {
         return addressId;
     }
 
-    public void setAddressId(int addressId) {
+    public void setAddressId(Integer addressId) {
         this.addressId = addressId;
     }
 
@@ -40,11 +43,19 @@ public class Address {
         this.customer = customer;
     }
 
-    public String getAddress() {
-        return address;
+    public Area getArea() {
+        return area;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setArea(Area area) {
+        this.area = area;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
     }
 }

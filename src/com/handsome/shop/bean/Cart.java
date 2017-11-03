@@ -10,29 +10,31 @@ import javax.persistence.ManyToOne;
  * by wangrongjun on 2017/6/16.
  */
 @Entity
-public class ShopCar {
+public class Cart {
 
     @Id
     @GeneratedValue
-    private int carId;
+    private Integer carId;
     @ManyToOne
     private Customer customer;
     @ManyToOne
     private Goods goods;
+    private Integer count;
 
-    public ShopCar() {
+    public Cart() {
     }
 
-    public ShopCar(Customer customer, Goods goods) {
+    public Cart(Customer customer, Goods goods, Integer count) {
         this.customer = customer;
         this.goods = goods;
+        this.count = count;
     }
 
-    public int getCarId() {
+    public Integer getCarId() {
         return carId;
     }
 
-    public void setCarId(int carId) {
+    public void setCarId(Integer carId) {
         this.carId = carId;
     }
 
@@ -50,5 +52,13 @@ public class ShopCar {
 
     public void setGoods(Goods goods) {
         this.goods = goods;
+    }
+
+    public Integer getCount() {
+        return count;
+    }
+
+    public void setCount(Integer count) {
+        this.count = count;
     }
 }

@@ -2,6 +2,7 @@ package com.handsome.shop.bean;
 
 
 import javax.persistence.*;
+import java.util.Date;
 
 /**
  * by wangrongjun on 2017/6/16.
@@ -9,67 +10,58 @@ import javax.persistence.*;
 @Entity
 public class Orders {
 
-    // TODO 订单应该有商品名称，下单时的价格，而且goods可为空，代表商品下架
-
     @Transient
-    public static final int STATE_CONTINUE = 0;
+    public static final int STATE_CONTINUE = 0;// 交易中
     @Transient
-    public static final int STATE_SUCCEED = 1;
+    public static final int STATE_SUCCEED = 1;// 交易成功
     @Transient
-    public static final int STATE_FAILED = 2;
+    public static final int STATE_FAILED = 2;// 交易失败
 
     @Id
     @GeneratedValue
-    private int ordersId;
+    private Integer ordersId;
     @ManyToOne(fetch = FetchType.LAZY)
     private Customer customer;
-    @ManyToOne
-    private Goods goods;
-    private int buyCount;//该商品购买的数量
-    private double price;//订单创建时商品的总价格（预防下单后商家修改该商品的价格导致出错）
-    private String phone;//收货人的联系电话
+    private Double totalPrice;//该订单的总价格（打折后，含运费）
+    private Double freight;// 运费
+    private String note;// 顾客备注信息
+    private String receiverPhone;//收货人的联系电话
     private String receiverName;//收货人的姓名
-    private String address;//收货人的收货地址（预防下单后客户修改收货地址导致出错）
-    private String createTime;//订单创建时间，格式：”yyyy-MM-dd HH:mm:ss”
-    private int state;//订单状态，进行中，关闭，成功
-
-    @Override
-    public String toString() {
-        return "Orders{" +
-                "ordersId=" + ordersId +
-                ", customer=" + customer +
-                ", goods=" + goods +
-                ", buyCount=" + buyCount +
-                ", price=" + price +
-                ", phone='" + phone + '\'' +
-                ", receiverName='" + receiverName + '\'' +
-                ", address='" + address + '\'' +
-                ", createTime='" + createTime + '\'' +
-                ", state=" + state +
-                '}';
-    }
+    private String address;//收货人的收货地址（不使用外键，避免下单后客户修改收货地址导致出错）
+    private Date createTime;//订单创建时间，格式：”yyyy-MM-dd HH:mm:ss”
+    private Integer state;//订单状态，进行中，关闭，成功
 
     public Orders() {
     }
 
-    public Orders(Customer customer, Goods goods, int buyCount, double price, String phone,
-                  String receiverName, String address, String createTime, int state) {
+    public Orders(Customer customer, Double totalPrice, String note, String receiverPhone, String receiverName, String address, Date createTime, Integer state) {
         this.customer = customer;
-        this.goods = goods;
-        this.buyCount = buyCount;
-        this.price = price;
-        this.phone = phone;
+        this.totalPrice = totalPrice;
+        this.note = note;
+        this.receiverPhone = receiverPhone;
         this.receiverName = receiverName;
         this.address = address;
         this.createTime = createTime;
         this.state = state;
     }
 
-    public int getOrdersId() {
+    public static int getStateContinue() {
+        return STATE_CONTINUE;
+    }
+
+    public static int getStateSucceed() {
+        return STATE_SUCCEED;
+    }
+
+    public static int getStateFailed() {
+        return STATE_FAILED;
+    }
+
+    public Integer getOrdersId() {
         return ordersId;
     }
 
-    public void setOrdersId(int ordersId) {
+    public void setOrdersId(Integer ordersId) {
         this.ordersId = ordersId;
     }
 
@@ -81,44 +73,36 @@ public class Orders {
         this.customer = customer;
     }
 
-    public Goods getGoods() {
-        return goods;
+    public Double getTotalPrice() {
+        return totalPrice;
     }
 
-    public void setGoods(Goods goods) {
-        this.goods = goods;
+    public void setTotalPrice(Double totalPrice) {
+        this.totalPrice = totalPrice;
     }
 
-    public int getBuyCount() {
-        return buyCount;
+    public String getNote() {
+        return note;
     }
 
-    public void setBuyCount(int buyCount) {
-        this.buyCount = buyCount;
+    public void setNote(String note) {
+        this.note = note;
     }
 
-    public double getPrice() {
-        return price;
+    public String getReceiverPhone() {
+        return receiverPhone;
     }
 
-    public void setPrice(double price) {
-        this.price = price;
+    public void setReceiverPhone(String receiverPhone) {
+        this.receiverPhone = receiverPhone;
     }
 
-    public String getCreateTime() {
-        return createTime;
+    public String getReceiverName() {
+        return receiverName;
     }
 
-    public void setCreateTime(String createTime) {
-        this.createTime = createTime;
-    }
-
-    public int getState() {
-        return state;
-    }
-
-    public void setState(int state) {
-        this.state = state;
+    public void setReceiverName(String receiverName) {
+        this.receiverName = receiverName;
     }
 
     public String getAddress() {
@@ -129,19 +113,27 @@ public class Orders {
         this.address = address;
     }
 
-    public String getPhone() {
-        return phone;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
-    public String getReceiverName() {
-        return receiverName;
+    public Integer getState() {
+        return state;
     }
 
-    public void setReceiverName(String realName) {
-        this.receiverName = receiverName;
+    public void setState(Integer state) {
+        this.state = state;
+    }
+
+    public Double getFreight() {
+        return freight;
+    }
+
+    public void setFreight(Double freight) {
+        this.freight = freight;
     }
 }

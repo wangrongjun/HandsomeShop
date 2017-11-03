@@ -1,7 +1,7 @@
 <%@ page import="com.handsome.shop.bean.Customer" %>
 <%@ page import="com.handsome.shop.framework.DaoFactory" %>
 <%@ page import="com.handsome.shop.dao.OrdersDao" %>
-<%@ page import="com.handsome.shop.dao.ShopCarDao" %>
+<%@ page import="com.handsome.shop.dao.CartDao" %>
 <%--
   Created by IntelliJ IDEA.
   User: wangrongjun
@@ -29,7 +29,7 @@
         <a href="register.jsp">注册</a>
         <%
         } else {
-            ShopCarDao shopCarDao = DaoFactory.getShopCarDao();
+            CartDao shopCarDao = DaoFactory.getShopCarDao();
             long shopCarCount = shopCarDao.queryCountByCustomerId(customer.getCustomerId());
             OrdersDao ordersDao = DaoFactory.getOrdersDao();
             int ordersCount = ordersDao.queryCountByCustomerId(customer.getCustomerId());

@@ -1,4 +1,4 @@
-package com.handsome.shop.domain;
+package com.handsome.shop.bean.view;
 
 /**
  * by wangrongjun on 2017/9/29.

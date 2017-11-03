@@ -1,6 +1,7 @@
 package com.handsome.shop.bean;
 
 import javax.persistence.*;
+import java.util.Date;
 
 /**
  * by wangrongjun on 2017/6/16.
@@ -17,48 +18,49 @@ public class Evaluate {
 
     @Id
     @GeneratedValue
-    private int evaluateId;
+    private Integer evaluateId;
     @ManyToOne(fetch = FetchType.LAZY)
-    private Orders orders;//Order外键，对某次购物（即一份订单）的评价
+    private OrdersDetail ordersDetail;//对某次购物（即一个订单明细）的评价
     private String content;//评价内容
-    private int evaluateLevel;//评价，好评，中评，差评
-    private String createTime;//评价时间，格式：”yyyy-MM-dd HH:mm:ss”
-
-    @Override
-    public String toString() {
-        return "Evaluate{" +
-                "evaluateId=" + evaluateId +
-                ", orders=" + orders +
-                ", content='" + content + '\'' +
-                ", evaluateLevel=" + evaluateLevel +
-                ", createTime='" + createTime + '\'' +
-                '}';
-    }
+    private Integer evaluateLevel;//评价，好评，中评，差评
+    private Date createTime;//评价时间，格式：”yyyy-MM-dd HH:mm:ss”
 
     public Evaluate() {
     }
 
-    public Evaluate(Orders orders, String content, int evaluateLevel, String createTime) {
-        this.orders = orders;
+    public Evaluate(OrdersDetail ordersDetail, String content, Integer evaluateLevel, Date createTime) {
+        this.ordersDetail = ordersDetail;
         this.content = content;
         this.evaluateLevel = evaluateLevel;
         this.createTime = createTime;
     }
 
-    public int getEvaluateId() {
+    public static int getLevelBad() {
+        return LEVEL_BAD;
+    }
+
+    public static int getLevelNormal() {
+        return LEVEL_NORMAL;
+    }
+
+    public static int getLevelGood() {
+        return LEVEL_GOOD;
+    }
+
+    public Integer getEvaluateId() {
         return evaluateId;
     }
 
-    public void setEvaluateId(int evaluateId) {
+    public void setEvaluateId(Integer evaluateId) {
         this.evaluateId = evaluateId;
     }
 
-    public Orders getOrders() {
-        return orders;
+    public OrdersDetail getOrdersDetail() {
+        return ordersDetail;
     }
 
-    public void setOrders(Orders orders) {
-        this.orders = orders;
+    public void setOrdersDetail(OrdersDetail ordersDetail) {
+        this.ordersDetail = ordersDetail;
     }
 
     public String getContent() {
@@ -69,19 +71,19 @@ public class Evaluate {
         this.content = content;
     }
 
-    public int getEvaluateLevel() {
+    public Integer getEvaluateLevel() {
         return evaluateLevel;
     }
 
-    public void setEvaluateLevel(int level) {
-        this.evaluateLevel = level;
+    public void setEvaluateLevel(Integer evaluateLevel) {
+        this.evaluateLevel = evaluateLevel;
     }
 
-    public String getCreateTime() {
+    public Date getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(String time) {
-        this.createTime = time;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 }

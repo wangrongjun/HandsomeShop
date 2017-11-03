@@ -1,6 +1,6 @@
 <%@ page import="com.handsome.shop.dao.CustomerDao" %>
 <%@ page import="com.handsome.shop.dao.impl.CustomerDaoImpl" %>
-<%@ page import="com.handsome.shop.domain.GenderReport" %>
+<%@ page import="com.handsome.shop.bean.view.GenderReport" %>
 <%@ page import="org.jfree.chart.ChartFactory" %>
 <%@ page import="org.jfree.chart.JFreeChart" %>
 <%@ page import="org.jfree.chart.StandardChartTheme" %>

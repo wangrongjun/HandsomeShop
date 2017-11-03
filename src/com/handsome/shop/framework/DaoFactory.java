@@ -12,7 +12,7 @@ public class DaoFactory {
         return new CustomerDaoImpl();
     }
 
-    public static GoodsTypeDao getGoodsTypeDao() {
+    public static GoodsCategoryDao getGoodsTypeDao() {
         return new GoodsTypeDaoImpl();
     }
 
@@ -36,7 +36,11 @@ public class DaoFactory {
         return new OrdersDaoImpl();
     }
 
-    public static ShopCarDao getShopCarDao() {
+    public static OrdersDetailDao getOrdersDetailDao() {
+        return new OrdersDetailDaoImpl();
+    }
+
+    public static CartDao getShopCarDao() {
         return new ShopCarDaoImpl();
     }
 

@@ -16,12 +16,12 @@ public class Customer {
 
     @Id
     @GeneratedValue
-    private int customerId;
+    private Integer customerId;
     private String phone;
     private String password;
     private String realName;
     private String nickname;
-    private int gender;
+    private Integer gender;
     private String headUrl;
 
     @Override
@@ -40,12 +40,12 @@ public class Customer {
     public Customer() {
     }
 
-    public Customer(int customerId) {
+    public Customer(Integer customerId) {
         this.customerId = customerId;
     }
 
     public Customer(String phone, String password, String realName, String nickname,
-                    int gender, String headUrl) {
+                    Integer gender, String headUrl) {
         this.phone = phone;
         this.password = password;
         this.realName = realName;
@@ -58,7 +58,7 @@ public class Customer {
         return customerId;
     }
 
-    public void setCustomerId(int customerId) {
+    public void setCustomerId(Integer customerId) {
         this.customerId = customerId;
     }
 
@@ -70,11 +70,11 @@ public class Customer {
         this.nickname = nickname;
     }
 
-    public int getGender() {
+    public Integer getGender() {
         return gender;
     }
 
-    public void setGender(int gender) {
+    public void setGender(Integer gender) {
         this.gender = gender;
     }
 
