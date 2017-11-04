@@ -1,7 +1,7 @@
 <%@ page import="com.handsome.shop.bean.Customer" %>
-<%@ page import="com.handsome.shop.framework.DaoFactory" %>
-<%@ page import="com.handsome.shop.dao.OrdersDao" %>
 <%@ page import="com.handsome.shop.dao.CartDao" %>
+<%@ page import="com.handsome.shop.dao.OrdersDao" %>
+<%@ page import="com.handsome.shop.framework.DaoFactory" %>
 <%--
   Created by IntelliJ IDEA.
   User: wangrongjun

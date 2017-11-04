@@ -1,7 +1,11 @@
 package com.handsome.shop.bean;
 
 
+import com.wangrj.java_lib.math.combination.ArrangementUtil;
+
 import javax.persistence.*;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -28,20 +32,20 @@ public class Goods {
     private double price;
     @OneToMany
     private List<AttrName> attrNameList;
+    @OneToMany
+    private List<AttrComb> attrCombList;
+
+    void a(){
+        for (int i = 0; i < 10; i++) {
+            System.out.println(i);
+        }
+    }
 
     public Goods() {
     }
 
     public Goods(Integer goodsId) {
         this.goodsId = goodsId;
-    }
-
-    public Goods(String goodsName, String description, Integer remainCount, GoodsCategory goodsCategory, double price) {
-        this.goodsName = goodsName;
-        this.description = description;
-        this.remainCount = remainCount;
-        this.goodsCategory = goodsCategory;
-        this.price = price;
     }
 
     public Goods(String goodsName, String description, Integer remainCount, GoodsCategory goodsCategory, Shop shop, double price) {
@@ -131,5 +135,13 @@ public class Goods {
 
     public void setAttrNameList(List<AttrName> attrNameList) {
         this.attrNameList = attrNameList;
+    }
+
+    public List<AttrComb> getAttrCombList() {
+        return attrCombList;
+    }
+
+    public void setAttrCombList(List<AttrComb> attrCombList) {
+        this.attrCombList = attrCombList;
     }
 }

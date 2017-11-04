@@ -8,7 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
-    <title>贵美商城 - 商家首页</title>
+    <title>英俊商城 - 商家首页</title>
 </head>
 <body>
 ${seller.realName}
