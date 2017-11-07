@@ -1,11 +1,7 @@
 package com.handsome.shop.bean;
 
 
-import com.wangrj.java_lib.math.combination.ArrangementUtil;
-
 import javax.persistence.*;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -35,7 +31,7 @@ public class Goods {
     @OneToMany
     private List<AttrComb> attrCombList;
 
-    void a(){
+    void a() {
         for (int i = 0; i < 10; i++) {
             System.out.println(i);
         }
@@ -144,4 +140,5 @@ public class Goods {
     public void setAttrCombList(List<AttrComb> attrCombList) {
         this.attrCombList = attrCombList;
     }
+
 }

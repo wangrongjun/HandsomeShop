@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.handsome.shop.dao.GoodsImageDao">
+
+
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+    <!-- +++++++++++++ 以下是MybatisCreator生成的默认方法 +++++++++++++ -->
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+    <resultMap id="defaultMap" type="com.handsome.shop.bean.GoodsImage">
+        <id column="imageId" property="imageId"/>
+        <result column="imageUrl" property="imageUrl"/>
+        <association property="goods" javaType="com.handsome.shop.bean.Goods">
+            <id column="goods" property="goodsId"/>
+        </association>
+    </resultMap>
+
+    <sql id="whereSql">
+        <where>
+            <if test="imageId!=null">
+                AND imageId=#{imageId}
+            </if>
+            <if test="goods!=null">
+                AND goods=#{goods.goodsId}
+            </if>
+            <if test="imageUrl!=null">
+                AND imageUrl=#{imageUrl}
+            </if>
+        </where>
+    </sql>
+
+    <insert id="insert" parameterType="com.handsome.shop.bean.GoodsImage">
+        INSERT INTO GoodsImage(
+        imageId,goods,imageUrl
+        ) VALUES (
+        #{imageId},#{goods.goodsId},#{imageUrl}
+        )
+        <selectKey keyProperty="imageId" resultType="int">
+            SELECT sequence_GoodsImage.currval FROM dual
+        </selectKey>
+    </insert>
+
+    <delete id="deleteById" parameterType="long">
+        DELETE FROM GoodsImage WHERE imageId=#{id}
+    </delete>
+
+    <update id="update" parameterType="com.handsome.shop.bean.GoodsImage">
+        UPDATE GoodsImage
+        <set>
+            <if test="imageId!=null">
+            imageId=#{imageId},
+            </if>
+            <if test="goods!=null">
+            goods=#{goods.goodsId},
+            </if>
+            <if test="imageUrl!=null">
+            imageUrl=#{imageUrl},
+            </if>
+        </set>
+        WHERE imageId=#{imageId}
+    </update>
+
+    <!--必须在全局配置中设置<setting username="jdbcTypeForNull" value="NULL"/>，否则报错-->
+    <update id="updateContainsNull">
+        UPDATE GoodsImage SET
+            imageId=#{imageId},
+            goods=#{goods.goodsId},
+            imageUrl=#{imageUrl}
+        WHERE imageId=#{imageId}
+    </update>
+
+    <select id="queryById" parameterType="long" resultMap="defaultMap">
+        SELECT * FROM GoodsImage WHERE imageId=#{id}
+    </select>
+
+    <select id="queryAll" resultMap="defaultMap">
+        SELECT * FROM GoodsImage
+    </select>
+
+    <select id="queryAllLimit" resultMap="defaultMap">
+        SELECT * FROM (SELECT full_result_set.*,rownum rn FROM (
+
+        SELECT * FROM GoodsImage
+
+        ) full_result_set WHERE rownum<![CDATA[<=]]>${arg0+arg1}
+        ) WHERE rn>${arg0}
+    </select>
+
+    <select id="queryAllCount" resultType="int">
+        SELECT count(1) FROM GoodsImage
+    </select>
+
+    <select id="query" resultMap="defaultMap">
+        SELECT * FROM GoodsImage
+        <include refid="whereSql"/>
+    </select>
+
+    <select id="queryLimit" parameterType="com.handsome.shop.bean.GoodsImage" resultMap="defaultMap">
+        SELECT * FROM (SELECT full_result_set.*,rownum rn FROM (
+
+        SELECT * FROM GoodsImage
+        <where>
+            <if test="arg0.imageId!=null">
+                AND imageId=#{arg0.imageId}
+            </if>
+            <if test="arg0.goods!=null">
+                AND goods=#{arg0.goods.goodsId}
+            </if>
+            <if test="arg0.imageUrl!=null">
+                AND imageUrl=#{arg0.imageUrl}
+            </if>
+        </where>
+
+        ) full_result_set WHERE rownum<![CDATA[<=]]>${arg1+arg2}
+        ) WHERE rn>${arg1}
+    </select>
+
+    <select id="queryCount" resultType="int">
+        SELECT count(1) FROM GoodsImage
+        <include refid="whereSql"/>
+    </select>
+
+</mapper>

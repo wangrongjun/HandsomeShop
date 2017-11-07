@@ -54,7 +54,7 @@ public class Customer {
         this.headUrl = headUrl;
     }
 
-    public int getCustomerId() {
+    public Integer getCustomerId() {
         return customerId;
     }
 

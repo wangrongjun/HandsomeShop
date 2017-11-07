@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.handsome.shop.dao.AreaDao">
+
+
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+    <!-- +++++++++++++ 以下是MybatisCreator生成的默认方法 +++++++++++++ -->
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+    <resultMap id="defaultMap" type="com.handsome.shop.bean.Area">
+        <id column="areaId" property="areaId"/>
+        <result column="areaName" property="areaName"/>
+        <association property="parent" javaType="com.handsome.shop.bean.Area">
+            <id column="parent" property="areaId"/>
+        </association>
+    </resultMap>
+
+    <sql id="whereSql">
+        <where>
+            <if test="areaId!=null">
+                AND areaId=#{areaId}
+            </if>
+            <if test="areaName!=null">
+                AND areaName=#{areaName}
+            </if>
+            <if test="parent!=null">
+                AND parent=#{parent.areaId}
+            </if>
+        </where>
+    </sql>
+
+    <insert id="insert" parameterType="com.handsome.shop.bean.Area">
+        INSERT INTO Area(
+        areaId,areaName,parent
+        ) VALUES (
+        #{areaId},#{areaName},#{parent.areaId}
+        )
+        <selectKey keyProperty="areaId" resultType="int">
+            SELECT sequence_Area.currval FROM dual
+        </selectKey>
+    </insert>
+
+    <delete id="deleteById" parameterType="long">
+        DELETE FROM Area WHERE areaId=#{id}
+    </delete>
+
+    <update id="update" parameterType="com.handsome.shop.bean.Area">
+        UPDATE Area
+        <set>
+            <if test="areaId!=null">
+            areaId=#{areaId},
+            </if>
+            <if test="areaName!=null">
+            areaName=#{areaName},
+            </if>
+            <if test="parent!=null">
+            parent=#{parent.areaId},
+            </if>
+        </set>
+        WHERE areaId=#{areaId}
+    </update>
+
+    <!--必须在全局配置中设置<setting username="jdbcTypeForNull" value="NULL"/>，否则报错-->
+    <update id="updateContainsNull">
+        UPDATE Area SET
+            areaId=#{areaId},
+            areaName=#{areaName},
+            parent=#{parent.areaId}
+        WHERE areaId=#{areaId}
+    </update>
+
+    <select id="queryById" parameterType="long" resultMap="defaultMap">
+        SELECT * FROM Area WHERE areaId=#{id}
+    </select>
+
+    <select id="queryAll" resultMap="defaultMap">
+        SELECT * FROM Area
+    </select>
+
+    <select id="queryAllLimit" resultMap="defaultMap">
+        SELECT * FROM (SELECT full_result_set.*,rownum rn FROM (
+
+        SELECT * FROM Area
+
+        ) full_result_set WHERE rownum<![CDATA[<=]]>${arg0+arg1}
+        ) WHERE rn>${arg0}
+    </select>
+
+    <select id="queryAllCount" resultType="int">
+        SELECT count(1) FROM Area
+    </select>
+
+    <select id="query" resultMap="defaultMap">
+        SELECT * FROM Area
+        <include refid="whereSql"/>
+    </select>
+
+    <select id="queryLimit" parameterType="com.handsome.shop.bean.Area" resultMap="defaultMap">
+        SELECT * FROM (SELECT full_result_set.*,rownum rn FROM (
+
+        SELECT * FROM Area
+        <where>
+            <if test="arg0.areaId!=null">
+                AND areaId=#{arg0.areaId}
+            </if>
+            <if test="arg0.areaName!=null">
+                AND areaName=#{arg0.areaName}
+            </if>
+            <if test="arg0.parent!=null">
+                AND parent=#{arg0.parent.areaId}
+            </if>
+        </where>
+
+        ) full_result_set WHERE rownum<![CDATA[<=]]>${arg1+arg2}
+        ) WHERE rn>${arg1}
+    </select>
+
+    <select id="queryCount" resultType="int">
+        SELECT count(1) FROM Area
+        <include refid="whereSql"/>
+    </select>
+
+</mapper>

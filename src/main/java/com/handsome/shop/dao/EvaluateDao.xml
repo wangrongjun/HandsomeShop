@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.handsome.shop.dao.EvaluateDao">
+
+
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+    <!-- +++++++++++++ 以下是MybatisCreator生成的默认方法 +++++++++++++ -->
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+    <resultMap id="defaultMap" type="com.handsome.shop.bean.Evaluate">
+        <id column="evaluateId" property="evaluateId"/>
+        <result column="content" property="content"/>
+        <result column="evaluateLevel" property="evaluateLevel"/>
+        <result column="createTime" property="createTime"/>
+        <association property="ordersDetail" javaType="com.handsome.shop.bean.OrdersDetail">
+            <id column="ordersDetail" property="detailId"/>
+        </association>
+    </resultMap>
+
+    <sql id="whereSql">
+        <where>
+            <if test="evaluateId!=null">
+                AND evaluateId=#{evaluateId}
+            </if>
+            <if test="ordersDetail!=null">
+                AND ordersDetail=#{ordersDetail.detailId}
+            </if>
+            <if test="content!=null">
+                AND content=#{content}
+            </if>
+            <if test="evaluateLevel!=null">
+                AND evaluateLevel=#{evaluateLevel}
+            </if>
+            <if test="createTime!=null">
+                AND createTime=#{createTime}
+            </if>
+        </where>
+    </sql>
+
+    <insert id="insert" parameterType="com.handsome.shop.bean.Evaluate">
+        INSERT INTO Evaluate(
+        evaluateId,ordersDetail,content,evaluateLevel,createTime
+        ) VALUES (
+        #{evaluateId},#{ordersDetail.detailId},#{content},#{evaluateLevel},#{createTime}
+        )
+        <selectKey keyProperty="evaluateId" resultType="int">
+            SELECT sequence_Evaluate.currval FROM dual
+        </selectKey>
+    </insert>
+
+    <delete id="deleteById" parameterType="long">
+        DELETE FROM Evaluate WHERE evaluateId=#{id}
+    </delete>
+
+    <update id="update" parameterType="com.handsome.shop.bean.Evaluate">
+        UPDATE Evaluate
+        <set>
+            <if test="evaluateId!=null">
+            evaluateId=#{evaluateId},
+            </if>
+            <if test="ordersDetail!=null">
+            ordersDetail=#{ordersDetail.detailId},
+            </if>
+            <if test="content!=null">
+            content=#{content},
+            </if>
+            <if test="evaluateLevel!=null">
+            evaluateLevel=#{evaluateLevel},
+            </if>
+            <if test="createTime!=null">
+            createTime=#{createTime},
+            </if>
+        </set>
+        WHERE evaluateId=#{evaluateId}
+    </update>
+
+    <!--必须在全局配置中设置<setting username="jdbcTypeForNull" value="NULL"/>，否则报错-->
+    <update id="updateContainsNull">
+        UPDATE Evaluate SET
+            evaluateId=#{evaluateId},
+            ordersDetail=#{ordersDetail.detailId},
+            content=#{content},
+            evaluateLevel=#{evaluateLevel},
+            createTime=#{createTime}
+        WHERE evaluateId=#{evaluateId}
+    </update>
+
+    <select id="queryById" parameterType="long" resultMap="defaultMap">
+        SELECT * FROM Evaluate WHERE evaluateId=#{id}
+    </select>
+
+    <select id="queryAll" resultMap="defaultMap">
+        SELECT * FROM Evaluate
+    </select>
+
+    <select id="queryAllLimit" resultMap="defaultMap">
+        SELECT * FROM (SELECT full_result_set.*,rownum rn FROM (
+
+        SELECT * FROM Evaluate
+
+        ) full_result_set WHERE rownum<![CDATA[<=]]>${arg0+arg1}
+        ) WHERE rn>${arg0}
+    </select>
+
+    <select id="queryAllCount" resultType="int">
+        SELECT count(1) FROM Evaluate
+    </select>
+
+    <select id="query" resultMap="defaultMap">
+        SELECT * FROM Evaluate
+        <include refid="whereSql"/>
+    </select>
+
+    <select id="queryLimit" parameterType="com.handsome.shop.bean.Evaluate" resultMap="defaultMap">
+        SELECT * FROM (SELECT full_result_set.*,rownum rn FROM (
+
+        SELECT * FROM Evaluate
+        <where>
+            <if test="arg0.evaluateId!=null">
+                AND evaluateId=#{arg0.evaluateId}
+            </if>
+            <if test="arg0.ordersDetail!=null">
+                AND ordersDetail=#{arg0.ordersDetail.detailId}
+            </if>
+            <if test="arg0.content!=null">
+                AND content=#{arg0.content}
+            </if>
+            <if test="arg0.evaluateLevel!=null">
+                AND evaluateLevel=#{arg0.evaluateLevel}
+            </if>
+            <if test="arg0.createTime!=null">
+                AND createTime=#{arg0.createTime}
+            </if>
+        </where>
+
+        ) full_result_set WHERE rownum<![CDATA[<=]]>${arg1+arg2}
+        ) WHERE rn>${arg1}
+    </select>
+
+    <select id="queryCount" resultType="int">
+        SELECT count(1) FROM Evaluate
+        <include refid="whereSql"/>
+    </select>
+
+</mapper>

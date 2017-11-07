@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.handsome.shop.dao.AttrNameDao">
+
+
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+    <!-- +++++++++++++ 以下是MybatisCreator生成的默认方法 +++++++++++++ -->
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+    <resultMap id="defaultMap" type="com.handsome.shop.bean.AttrName">
+        <id column="attrNameId" property="attrNameId"/>
+        <result column="attrName" property="attrName"/>
+        <association property="goods" javaType="com.handsome.shop.bean.Goods">
+            <id column="goods" property="goodsId"/>
+        </association>
+    </resultMap>
+
+    <sql id="whereSql">
+        <where>
+            <if test="attrNameId!=null">
+                AND attrNameId=#{attrNameId}
+            </if>
+            <if test="attrName!=null">
+                AND attrName=#{attrName}
+            </if>
+            <if test="goods!=null">
+                AND goods=#{goods.goodsId}
+            </if>
+        </where>
+    </sql>
+
+    <insert id="insert" parameterType="com.handsome.shop.bean.AttrName">
+        INSERT INTO AttrName(
+        attrNameId,attrName,goods
+        ) VALUES (
+        #{attrNameId},#{attrName},#{goods.goodsId}
+        )
+        <selectKey keyProperty="attrNameId" resultType="int">
+            SELECT sequence_AttrName.currval FROM dual
+        </selectKey>
+    </insert>
+
+    <delete id="deleteById" parameterType="long">
+        DELETE FROM AttrName WHERE attrNameId=#{id}
+    </delete>
+
+    <update id="update" parameterType="com.handsome.shop.bean.AttrName">
+        UPDATE AttrName
+        <set>
+            <if test="attrNameId!=null">
+            attrNameId=#{attrNameId},
+            </if>
+            <if test="attrName!=null">
+            attrName=#{attrName},
+            </if>
+            <if test="goods!=null">
+            goods=#{goods.goodsId},
+            </if>
+        </set>
+        WHERE attrNameId=#{attrNameId}
+    </update>
+
+    <!--必须在全局配置中设置<setting username="jdbcTypeForNull" value="NULL"/>，否则报错-->
+    <update id="updateContainsNull">
+        UPDATE AttrName SET
+            attrNameId=#{attrNameId},
+            attrName=#{attrName},
+            goods=#{goods.goodsId}
+        WHERE attrNameId=#{attrNameId}
+    </update>
+
+    <select id="queryById" parameterType="long" resultMap="defaultMap">
+        SELECT * FROM AttrName WHERE attrNameId=#{id}
+    </select>
+
+    <select id="queryAll" resultMap="defaultMap">
+        SELECT * FROM AttrName
+    </select>
+
+    <select id="queryAllLimit" resultMap="defaultMap">
+        SELECT * FROM (SELECT full_result_set.*,rownum rn FROM (
+
+        SELECT * FROM AttrName
+
+        ) full_result_set WHERE rownum<![CDATA[<=]]>${arg0+arg1}
+        ) WHERE rn>${arg0}
+    </select>
+
+    <select id="queryAllCount" resultType="int">
+        SELECT count(1) FROM AttrName
+    </select>
+
+    <select id="query" resultMap="defaultMap">
+        SELECT * FROM AttrName
+        <include refid="whereSql"/>
+    </select>
+
+    <select id="queryLimit" parameterType="com.handsome.shop.bean.AttrName" resultMap="defaultMap">
+        SELECT * FROM (SELECT full_result_set.*,rownum rn FROM (
+
+        SELECT * FROM AttrName
+        <where>
+            <if test="arg0.attrNameId!=null">
+                AND attrNameId=#{arg0.attrNameId}
+            </if>
+            <if test="arg0.attrName!=null">
+                AND attrName=#{arg0.attrName}
+            </if>
+            <if test="arg0.goods!=null">
+                AND goods=#{arg0.goods.goodsId}
+            </if>
+        </where>
+
+        ) full_result_set WHERE rownum<![CDATA[<=]]>${arg1+arg2}
+        ) WHERE rn>${arg1}
+    </select>
+
+    <select id="queryCount" resultType="int">
+        SELECT count(1) FROM AttrName
+        <include refid="whereSql"/>
+    </select>
+
+</mapper>

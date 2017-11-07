@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.handsome.shop.dao.AddressDao">
+
+
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+    <!-- +++++++++++++ 以下是MybatisCreator生成的默认方法 +++++++++++++ -->
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+    <resultMap id="defaultMap" type="com.handsome.shop.bean.Address">
+        <id column="addressId" property="addressId"/>
+        <result column="street" property="street"/>
+        <association property="customer" javaType="com.handsome.shop.bean.Customer">
+            <id column="customer" property="customerId"/>
+        </association>
+        <association property="area" javaType="com.handsome.shop.bean.Area">
+            <id column="area" property="areaId"/>
+        </association>
+    </resultMap>
+
+    <sql id="whereSql">
+        <where>
+            <if test="addressId!=null">
+                AND addressId=#{addressId}
+            </if>
+            <if test="customer!=null">
+                AND customer=#{customer.customerId}
+            </if>
+            <if test="area!=null">
+                AND area=#{area.areaId}
+            </if>
+            <if test="street!=null">
+                AND street=#{street}
+            </if>
+        </where>
+    </sql>
+
+    <insert id="insert" parameterType="com.handsome.shop.bean.Address">
+        INSERT INTO Address(
+        addressId,customer,area,street
+        ) VALUES (
+        #{addressId},#{customer.customerId},#{area.areaId},#{street}
+        )
+        <selectKey keyProperty="addressId" resultType="int">
+            SELECT sequence_Address.currval FROM dual
+        </selectKey>
+    </insert>
+
+    <delete id="deleteById" parameterType="long">
+        DELETE FROM Address WHERE addressId=#{id}
+    </delete>
+
+    <update id="update" parameterType="com.handsome.shop.bean.Address">
+        UPDATE Address
+        <set>
+            <if test="addressId!=null">
+            addressId=#{addressId},
+            </if>
+            <if test="customer!=null">
+            customer=#{customer.customerId},
+            </if>
+            <if test="area!=null">
+            area=#{area.areaId},
+            </if>
+            <if test="street!=null">
+            street=#{street},
+            </if>
+        </set>
+        WHERE addressId=#{addressId}
+    </update>
+
+    <!--必须在全局配置中设置<setting username="jdbcTypeForNull" value="NULL"/>，否则报错-->
+    <update id="updateContainsNull">
+        UPDATE Address SET
+            addressId=#{addressId},
+            customer=#{customer.customerId},
+            area=#{area.areaId},
+            street=#{street}
+        WHERE addressId=#{addressId}
+    </update>
+
+    <select id="queryById" parameterType="long" resultMap="defaultMap">
+        SELECT * FROM Address WHERE addressId=#{id}
+    </select>
+
+    <select id="queryAll" resultMap="defaultMap">
+        SELECT * FROM Address
+    </select>
+
+    <select id="queryAllLimit" resultMap="defaultMap">
+        SELECT * FROM (SELECT full_result_set.*,rownum rn FROM (
+
+        SELECT * FROM Address
+
+        ) full_result_set WHERE rownum<![CDATA[<=]]>${arg0+arg1}
+        ) WHERE rn>${arg0}
+    </select>
+
+    <select id="queryAllCount" resultType="int">
+        SELECT count(1) FROM Address
+    </select>
+
+    <select id="query" resultMap="defaultMap">
+        SELECT * FROM Address
+        <include refid="whereSql"/>
+    </select>
+
+    <select id="queryLimit" parameterType="com.handsome.shop.bean.Address" resultMap="defaultMap">
+        SELECT * FROM (SELECT full_result_set.*,rownum rn FROM (
+
+        SELECT * FROM Address
+        <where>
+            <if test="arg0.addressId!=null">
+                AND addressId=#{arg0.addressId}
+            </if>
+            <if test="arg0.customer!=null">
+                AND customer=#{arg0.customer.customerId}
+            </if>
+            <if test="arg0.area!=null">
+                AND area=#{arg0.area.areaId}
+            </if>
+            <if test="arg0.street!=null">
+                AND street=#{arg0.street}
+            </if>
+        </where>
+
+        ) full_result_set WHERE rownum<![CDATA[<=]]>${arg1+arg2}
+        ) WHERE rn>${arg1}
+    </select>
+
+    <select id="queryCount" resultType="int">
+        SELECT count(1) FROM Address
+        <include refid="whereSql"/>
+    </select>
+
+</mapper>

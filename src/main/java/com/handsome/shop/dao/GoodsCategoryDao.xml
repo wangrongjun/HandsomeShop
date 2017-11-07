@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.handsome.shop.dao.GoodsCategoryDao">
+
+    <select id="queryAll" resultMap="queryAllMap">
+        SELECT * FROM GoodsCategory c1 JOIN GoodsCategory c2 WHERE c1.
+    </select>
+
+    <resultMap id="queryAllMap" type="com.handsome.shop.bean.GoodsCategory">
+        <id column="categoryId" property="categoryId"/>
+        <result column="name" property="name"/>
+        <association property="superCategory" javaType="com.handsome.shop.bean.GoodsCategory">
+            <id column="superCategory" property="categoryId"/>
+        </association>
+        <collection property="children" ofType="com.handsome.shop.bean.GoodsCategory">
+            <id column="categoryId" property="categoryId"/>
+        </collection>
+    </resultMap>
+
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+    <!-- +++++++++++++ 以下是MybatisCreator生成的默认方法 +++++++++++++ -->
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+    <resultMap id="defaultMap" type="com.handsome.shop.bean.GoodsCategory">
+        <id column="categoryId" property="categoryId"/>
+        <result column="name" property="name"/>
+        <association property="superCategory" javaType="com.handsome.shop.bean.GoodsCategory">
+            <id column="superCategory" property="categoryId"/>
+        </association>
+    </resultMap>
+
+    <sql id="whereSql">
+        <where>
+            <if test="categoryId!=null">
+                AND categoryId=#{categoryId}
+            </if>
+            <if test="name!=null">
+                AND name=#{name}
+            </if>
+            <if test="superCategory!=null">
+                AND superCategory=#{superCategory.categoryId}
+            </if>
+        </where>
+    </sql>
+
+    <insert id="insert" parameterType="com.handsome.shop.bean.GoodsCategory">
+        INSERT INTO GoodsCategory(
+        categoryId,name,superCategory
+        ) VALUES (
+        #{categoryId},#{name},#{superCategory.categoryId}
+        )
+        <selectKey keyProperty="categoryId" resultType="int">
+            SELECT sequence_GoodsCategory.currval FROM dual
+        </selectKey>
+    </insert>
+
+    <delete id="deleteById" parameterType="long">
+        DELETE FROM GoodsCategory WHERE categoryId=#{id}
+    </delete>
+
+    <update id="update" parameterType="com.handsome.shop.bean.GoodsCategory">
+        UPDATE GoodsCategory
+        <set>
+            <if test="categoryId!=null">
+                categoryId=#{categoryId},
+            </if>
+            <if test="name!=null">
+                name=#{name},
+            </if>
+            <if test="superCategory!=null">
+                superCategory=#{superCategory.categoryId},
+            </if>
+        </set>
+        WHERE categoryId=#{categoryId}
+    </update>
+
+    <!--必须在全局配置中设置<setting username="jdbcTypeForNull" value="NULL"/>，否则报错-->
+    <update id="updateContainsNull">
+        UPDATE GoodsCategory SET
+            categoryId=#{categoryId},
+            name=#{name},
+            superCategory=#{superCategory.categoryId}
+        WHERE categoryId=#{categoryId}
+    </update>
+
+    <select id="queryById" parameterType="long" resultMap="defaultMap">
+        SELECT * FROM GoodsCategory WHERE categoryId=#{id}
+    </select>
+
+    <!--<select id="queryAll" resultMap="defaultMap">-->
+    <!--SELECT * FROM GoodsCategory-->
+    <!--</select>-->
+
+    <select id="queryAllLimit" resultMap="defaultMap">
+        SELECT * FROM (SELECT full_result_set.*,rownum rn FROM (
+
+        SELECT * FROM GoodsCategory
+
+        ) full_result_set WHERE rownum<![CDATA[<=]]>${arg0+arg1}
+        ) WHERE rn>${arg0}
+    </select>
+
+    <select id="queryAllCount" resultType="int">
+        SELECT count(1) FROM GoodsCategory
+    </select>
+
+    <select id="query" resultMap="defaultMap">
+        SELECT * FROM GoodsCategory
+        <include refid="whereSql"/>
+    </select>
+
+    <select id="queryLimit" parameterType="com.handsome.shop.bean.GoodsCategory" resultMap="defaultMap">
+        SELECT * FROM (SELECT full_result_set.*,rownum rn FROM (
+
+        SELECT * FROM GoodsCategory
+        <where>
+            <if test="arg0.categoryId!=null">
+                AND categoryId=#{arg0.categoryId}
+            </if>
+            <if test="arg0.name!=null">
+                AND name=#{arg0.name}
+            </if>
+            <if test="arg0.superCategory!=null">
+                AND superCategory=#{arg0.superCategory.categoryId}
+            </if>
+        </where>
+
+        ) full_result_set WHERE rownum<![CDATA[<=]]>${arg1+arg2}
+        ) WHERE rn>${arg1}
+    </select>
+
+    <select id="queryCount" resultType="int">
+        SELECT count(1) FROM GoodsCategory
+        <include refid="whereSql"/>
+    </select>
+
+</mapper>

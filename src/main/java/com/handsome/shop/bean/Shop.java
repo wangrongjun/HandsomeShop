@@ -20,6 +20,10 @@ public class Shop {
     public Shop() {
     }
 
+    public Shop(int shopId) {
+        this.shopId = shopId;
+    }
+
     public Shop(Seller seller, String shopName, String description, String headUrl) {
         this.seller = seller;
         this.shopName = shopName;

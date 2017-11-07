@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.handsome.shop.dao.ShopDao">
+
+
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+    <!-- +++++++++++++ 以下是MybatisCreator生成的默认方法 +++++++++++++ -->
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+    <resultMap id="defaultMap" type="com.handsome.shop.bean.Shop">
+        <id column="shopId" property="shopId"/>
+        <result column="shopName" property="shopName"/>
+        <result column="description" property="description"/>
+        <result column="headUrl" property="headUrl"/>
+        <association property="seller" javaType="com.handsome.shop.bean.Seller">
+            <id column="seller" property="sellerId"/>
+        </association>
+    </resultMap>
+
+    <sql id="whereSql">
+        <where>
+            <if test="shopId!=null">
+                AND shopId=#{shopId}
+            </if>
+            <if test="seller!=null">
+                AND seller=#{seller.sellerId}
+            </if>
+            <if test="shopName!=null">
+                AND shopName=#{shopName}
+            </if>
+            <if test="description!=null">
+                AND description=#{description}
+            </if>
+            <if test="headUrl!=null">
+                AND headUrl=#{headUrl}
+            </if>
+        </where>
+    </sql>
+
+    <insert id="insert" parameterType="com.handsome.shop.bean.Shop">
+        INSERT INTO Shop(
+        shopId,seller,shopName,description,headUrl
+        ) VALUES (
+        #{shopId},#{seller.sellerId},#{shopName},#{description},#{headUrl}
+        )
+        <selectKey keyProperty="shopId" resultType="int">
+            SELECT sequence_Shop.currval FROM dual
+        </selectKey>
+    </insert>
+
+    <delete id="deleteById" parameterType="long">
+        DELETE FROM Shop WHERE shopId=#{id}
+    </delete>
+
+    <update id="update" parameterType="com.handsome.shop.bean.Shop">
+        UPDATE Shop
+        <set>
+            <if test="shopId!=null">
+            shopId=#{shopId},
+            </if>
+            <if test="seller!=null">
+            seller=#{seller.sellerId},
+            </if>
+            <if test="shopName!=null">
+            shopName=#{shopName},
+            </if>
+            <if test="description!=null">
+            description=#{description},
+            </if>
+            <if test="headUrl!=null">
+            headUrl=#{headUrl},
+            </if>
+        </set>
+        WHERE shopId=#{shopId}
+    </update>
+
+    <!--必须在全局配置中设置<setting username="jdbcTypeForNull" value="NULL"/>，否则报错-->
+    <update id="updateContainsNull">
+        UPDATE Shop SET
+            shopId=#{shopId},
+            seller=#{seller.sellerId},
+            shopName=#{shopName},
+            description=#{description},
+            headUrl=#{headUrl}
+        WHERE shopId=#{shopId}
+    </update>
+
+    <select id="queryById" parameterType="long" resultMap="defaultMap">
+        SELECT * FROM Shop WHERE shopId=#{id}
+    </select>
+
+    <select id="queryAll" resultMap="defaultMap">
+        SELECT * FROM Shop
+    </select>
+
+    <select id="queryAllLimit" resultMap="defaultMap">
+        SELECT * FROM (SELECT full_result_set.*,rownum rn FROM (
+
+        SELECT * FROM Shop
+
+        ) full_result_set WHERE rownum<![CDATA[<=]]>${arg0+arg1}
+        ) WHERE rn>${arg0}
+    </select>
+
+    <select id="queryAllCount" resultType="int">
+        SELECT count(1) FROM Shop
+    </select>
+
+    <select id="query" resultMap="defaultMap">
+        SELECT * FROM Shop
+        <include refid="whereSql"/>
+    </select>
+
+    <select id="queryLimit" parameterType="com.handsome.shop.bean.Shop" resultMap="defaultMap">
+        SELECT * FROM (SELECT full_result_set.*,rownum rn FROM (
+
+        SELECT * FROM Shop
+        <where>
+            <if test="arg0.shopId!=null">
+                AND shopId=#{arg0.shopId}
+            </if>
+            <if test="arg0.seller!=null">
+                AND seller=#{arg0.seller.sellerId}
+            </if>
+            <if test="arg0.shopName!=null">
+                AND shopName=#{arg0.shopName}
+            </if>
+            <if test="arg0.description!=null">
+                AND description=#{arg0.description}
+            </if>
+            <if test="arg0.headUrl!=null">
+                AND headUrl=#{arg0.headUrl}
+            </if>
+        </where>
+
+        ) full_result_set WHERE rownum<![CDATA[<=]]>${arg1+arg2}
+        ) WHERE rn>${arg1}
+    </select>
+
+    <select id="queryCount" resultType="int">
+        SELECT count(1) FROM Shop
+        <include refid="whereSql"/>
+    </select>
+
+</mapper>

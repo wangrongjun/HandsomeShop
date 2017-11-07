@@ -1,22 +1,33 @@
 package com.handsome.shop.test;
 
 import com.handsome.shop.bean.*;
+import com.handsome.shop.dao.*;
 import com.wangrj.java_lib.db3.DbUtil;
 import com.wangrj.java_lib.java_util.DateUtil;
+import com.wangrj.java_lib.mybatis.MybatisUtil;
+import org.apache.ibatis.io.Resources;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * by wangrongjun on 2017/6/17.
  */
 public class DaoTest {
 
-    private GoodsCategoryDao categoryDao;
     private CustomerDao customerDao;
     private SellerDao sellerDao;
     private ShopDao shopDao;
+    private GoodsCategoryDao categoryDao;
     private GoodsDao goodsDao;
     private GoodsImageDao goodsImageDao;
     private AttrNameDao attrNameDao;
@@ -26,13 +37,11 @@ public class DaoTest {
     private OrdersDetailDao ordersDetailDao;
     private CartDao cartDao;
     private EvaluateDao evaluateDao;
-    //    private AreaDao areaDao;
+    private AreaDao areaDao;
     private AddressDao addressDao;
 
     @Test
     public void testQuery() {
-//        HibernateDao.buildSessionFactory();
-//
 //        LogUtil.printEntity(customerDao.queryByPhone("15521302230"));
 //        LogUtil.printEntity(customerDao.countGender());
 //
@@ -61,8 +70,6 @@ public class DaoTest {
 //        LogUtil.printEntity(addressDao.queryByCustomerId(25), "customer");
 //
 //        LogUtil.printEntity(evaluateDao.queryByGoodsId(17));
-//
-//        HibernateDao.closeSessionFactory();
     }
 
     @Test
@@ -79,19 +86,20 @@ public class DaoTest {
     }
 
     @Test
-    public void testInsertArea() throws Exception {
-        String xmlPath = "src/com/handsome/shop/test/LocList_China.xml";
-        LocListUtil.foreach(xmlPath, (type, name, code, parentId) -> {
-            Area area = new Area(name, new Area(parentId));
-//            areaDao.insert(area);
-            return area.getAreaId();
-        });
-    }
-
-    @Test
     public void testInsert() throws Exception {
-//        HibernateDao.buildSessionFactory("create");
-        DbUtil.dropAndCreateTables(this);
+        testDropAndCreate();
+
+        Customer 英俊 = new Customer("15521302230", "123", "英俊", "英俊", 1, "/admin/img/customer_1.jpg");
+        Customer 沫沫 = new Customer("13023796942", "123", "沫沫", "沫宝儿", 0, "/admin/img/customer_2.jpg");
+        customerDao.insert(英俊);
+        customerDao.insert(沫沫);
+
+        Seller 张三 = new Seller("110", "123", "张三", "明月公主", 0, "/admin/img/seller_1.jpg");
+        Seller 李四 = new Seller("120", "123", "李四", "型男", 1, "/admin/img/seller_2.jpg");
+        Shop 东方电脑城 = new Shop(张三, "东方电脑城", "专卖电脑及其设备", "/admin/img/shop_1.jpg");
+        Shop 手机旗舰店 = new Shop(张三, "手机旗舰店", "出售最新的三星，苹果手机", "/admin/img/shop_2.jpg");
+        Shop 生鲜店 = new Shop(李四, "生鲜店", "各种新鲜水果，蔬菜应有尽有！", "/admin/img/shop_3.jpg");
+        Shop 零食店 = new Shop(李四, "零食店", "吃货预备营！", "/admin/img/shop_4.jpg");
 
         GoodsCategory 电子产品 = new GoodsCategory("电子产品", null);
         GoodsCategory 手机 = new GoodsCategory("手机", 电子产品);
@@ -124,18 +132,6 @@ public class DaoTest {
         categoryDao.insert(夏装);
         categoryDao.insert(冬装);
 
-        Customer 英俊 = new Customer("15521302230", "123", "英俊", "英俊", 1, "admin/img/customer_1.jpg");
-        Customer 沫沫 = new Customer("13023796942", "123", "沫沫", "沫宝儿", 0, "admin/img/customer_2.jpg");
-        customerDao.insert(英俊);
-        customerDao.insert(沫沫);
-
-        Seller 张三 = new Seller("110", "123", "张三", "明月公主", 0, "admin/img/seller_1.jpg");
-        Seller 李四 = new Seller("120", "123", "李四", "型男", 1, "admin/img/seller_2.jpg");
-        Shop 东方电脑城 = new Shop(张三, "东方电脑城", "专卖电脑及其设备", "admin/img/shop_1.jpg");
-        Shop 手机旗舰店 = new Shop(张三, "手机旗舰店", "出售最新的三星，苹果手机", "admin/img/shop_2.jpg");
-        Shop 生鲜店 = new Shop(李四, "生鲜店", "各种新鲜水果，蔬菜应有尽有！", "admin/img/shop_3.jpg");
-        Shop 零食店 = new Shop(李四, "零食店", "吃货预备营！", "admin/img/shop_4.jpg");
-
         Goods 宏基笔记本 = new Goods("宏基笔记本", "Aspire最新版", 20, 笔记本, 东方电脑城, 3200);
         Goods 苹果笔记本 = new Goods("苹果笔记本", "超薄迷你", 60, 笔记本, 东方电脑城, 5400);
         Goods 三星E7手机 = new Goods("三星E7手机", "E7系列", 38, 手机, 手机旗舰店, 1500);
@@ -162,25 +158,25 @@ public class DaoTest {
         goodsDao.insert(辣条);
         goodsDao.insert(可乐);
 
-        goodsImageDao.insert(new GoodsImage(宏基笔记本, "admin/img/goods_1.jpg"));
-        goodsImageDao.insert(new GoodsImage(宏基笔记本, "admin/img/goods_2.jpg"));
-        goodsImageDao.insert(new GoodsImage(宏基笔记本, "admin/img/goods_3.jpg"));
-        goodsImageDao.insert(new GoodsImage(宏基笔记本, "admin/img/goods_4.jpg"));
-        goodsImageDao.insert(new GoodsImage(宏基笔记本, "admin/img/goods_5.jpg"));
-        goodsImageDao.insert(new GoodsImage(苹果笔记本, "admin/img/goods_6.jpg"));
-        goodsImageDao.insert(new GoodsImage(苹果笔记本, "admin/img/goods_7.jpg"));
-        goodsImageDao.insert(new GoodsImage(苹果笔记本, "admin/img/goods_8.jpg"));
-        goodsImageDao.insert(new GoodsImage(三星E7手机, "admin/img/goods_9.jpg"));
-        goodsImageDao.insert(new GoodsImage(三星E7手机, "admin/img/goods_10.jpg"));
-        goodsImageDao.insert(new GoodsImage(iPhone7手机, "admin/img/goods_11.jpg"));
-        goodsImageDao.insert(new GoodsImage(iPhone7手机, "admin/img/goods_12.jpg"));
-        goodsImageDao.insert(new GoodsImage(菜心, "admin/img/goods_13.jpg"));
-        goodsImageDao.insert(new GoodsImage(菜心, "admin/img/goods_14.jpg"));
-        goodsImageDao.insert(new GoodsImage(菜心, "admin/img/goods_15.jpg"));
-        goodsImageDao.insert(new GoodsImage(苹果, "admin/img/goods_16.jpg"));
-        goodsImageDao.insert(new GoodsImage(辣条, "admin/img/goods_17.jpg"));
-        goodsImageDao.insert(new GoodsImage(可乐, "admin/img/goods_18.jpg"));
-        goodsImageDao.insert(new GoodsImage(可乐, "admin/img/goods_19.jpg"));
+        goodsImageDao.insert(new GoodsImage(宏基笔记本, "/admin/img/goods_1.jpg"));
+        goodsImageDao.insert(new GoodsImage(宏基笔记本, "/admin/img/goods_2.jpg"));
+        goodsImageDao.insert(new GoodsImage(宏基笔记本, "/admin/img/goods_3.jpg"));
+        goodsImageDao.insert(new GoodsImage(宏基笔记本, "/admin/img/goods_4.jpg"));
+        goodsImageDao.insert(new GoodsImage(宏基笔记本, "/admin/img/goods_5.jpg"));
+        goodsImageDao.insert(new GoodsImage(苹果笔记本, "/admin/img/goods_6.jpg"));
+        goodsImageDao.insert(new GoodsImage(苹果笔记本, "/admin/img/goods_7.jpg"));
+        goodsImageDao.insert(new GoodsImage(苹果笔记本, "/admin/img/goods_8.jpg"));
+        goodsImageDao.insert(new GoodsImage(三星E7手机, "/admin/img/goods_9.jpg"));
+        goodsImageDao.insert(new GoodsImage(三星E7手机, "/admin/img/goods_10.jpg"));
+        goodsImageDao.insert(new GoodsImage(iPhone7手机, "/admin/img/goods_11.jpg"));
+        goodsImageDao.insert(new GoodsImage(iPhone7手机, "/admin/img/goods_12.jpg"));
+        goodsImageDao.insert(new GoodsImage(菜心, "/admin/img/goods_13.jpg"));
+        goodsImageDao.insert(new GoodsImage(菜心, "/admin/img/goods_14.jpg"));
+        goodsImageDao.insert(new GoodsImage(菜心, "/admin/img/goods_15.jpg"));
+        goodsImageDao.insert(new GoodsImage(苹果, "/admin/img/goods_16.jpg"));
+        goodsImageDao.insert(new GoodsImage(辣条, "/admin/img/goods_17.jpg"));
+        goodsImageDao.insert(new GoodsImage(可乐, "/admin/img/goods_18.jpg"));
+        goodsImageDao.insert(new GoodsImage(可乐, "/admin/img/goods_19.jpg"));
 
         // 商品属性名
         AttrName rom = new AttrName("内存", iPhone7手机);
@@ -219,16 +215,25 @@ public class DaoTest {
         attrValueDao.insert(dianXin4G);
 
         // 创建商品的所有属性值组合5
-        attrCombDao.createCombination(iPhone7手机, 10, iPhone7手机.getPrice(), rom2G, rom4G, black, white);
-        attrCombDao.createCombination(三星E7手机, 20, 三星E7手机.getPrice(), cpuTwo, cpuFour, size16G, size64G, dianXin4G);
+        attrCombDao.createCombination(iPhone7手机, iPhone7手机.getPrice(), 10, rom2G, rom4G, black, white);
+        attrCombDao.createCombination(三星E7手机, 三星E7手机.getPrice(), 20, cpuTwo, cpuFour, size16G, size64G, dianXin4G);
 
         cartDao.insert(new Cart(英俊, iPhone7手机, 3));
         cartDao.insert(new Cart(英俊, 苹果笔记本, 1));
         cartDao.insert(new Cart(沫沫, iPhone7手机, 1));
         cartDao.insert(new Cart(沫沫, 苹果, 20));
 
-        Address address1 = new Address(英俊, null, "广州市番禺区广州大学城XX学校XX宿舍");
-        Address address2 = new Address(沫沫, null, "广州市天河区车陂冬景花园XX座XX号");
+        Area 广东省 = new Area("广东省", null);
+        Area 广州市 = new Area("广州市", 广东省);
+        Area 番禺区 = new Area("番禺区", 广州市);
+        Area 天河区 = new Area("天河区", 广州市);
+        areaDao.insert(广东省);
+        areaDao.insert(广州市);
+        areaDao.insert(番禺区);
+        areaDao.insert(天河区);
+
+        Address address1 = new Address(英俊, 番禺区, "广州大学城XX学校XX宿舍");
+        Address address2 = new Address(沫沫, 天河区, "车陂冬景花园XX座XX号");
         addressDao.insert(address1);
         addressDao.insert(address2);
 
@@ -263,43 +268,51 @@ public class DaoTest {
         evaluateDao.insert(new Evaluate(detail_英俊_宏基笔记本, "电脑一般吧，有时很卡", Evaluate.LEVEL_NORMAL, d("2015-01-12")));
         evaluateDao.insert(new Evaluate(detail_沫沫_iPhone7手机, "苹果的ISO系统一直很快，装逼利器！", Evaluate.LEVEL_GOOD, d("2015-03-07")));
         evaluateDao.insert(new Evaluate(detail_沫沫_宏基笔记本, "什么破电脑，买了没几天就坏了", Evaluate.LEVEL_BAD, d("2015-05-22")));
-
-        // 添加额外的无意义数据
-//        for (int i = 1; i <= 50; i++) {
-//            Customer customer = new Customer("155" + i, "123", "user" + i,
-//                    "nick" + i, i % 4 == 0 ? 1 : 0, "img" + i);
-//            customerDao.insert(customer);
-//        }
-//        Shop shop = new Shop(张三, "张三的商店", "张三的商店的描述", "admin/img/shop_1.jpg");
-//        shopDao.insert(shop);
-//        for (int i = 1; i <= 103; i++) {
-//            Goods goods = new Goods("商品" + i, "商品描述" + i,
-//                    i, categoryDao.queryById(i % 10 + 1), shop, 500 + i * 100);
-//            goodsDao.insert(goods);
-//            GoodsImage goodsImage = new GoodsImage(goods, "admin/img/goods_" + (i % 19 + 1) + ".jpg");
-//            goodsImageDao.insert(goodsImage);
-//        }
-
-//        HibernateDao.closeSessionFactory();
     }
 
+    @Test
+    public void testDropAndCreate() throws ClassNotFoundException {
+        List<Class> pojoClassList = new ArrayList<>();
+        Field[] fields = getClass().getDeclaredFields();
+        for (Field field : fields) {
+            if (!field.getName().endsWith("Dao")) {
+                continue;
+            }
+            String pojoClassName = field.getType().getName().replace(".dao.", ".bean.");
+            pojoClassName = pojoClassName.substring(0, pojoClassName.length() - 3);// 去除末尾的Dao
+            System.out.println(pojoClassName);
+            pojoClassList.add(Class.forName(pojoClassName));
+        }
+        DbUtil.dropAndCreateTables(DbUtil.DbType.Oracle, "orcl", "wang", "123", pojoClassList);
+    }
+
+    /**
+     * 添加无意义商品记录10000条
+     */
+    @Test
+    public void testInsertUselessGoods() throws IOException {
+        for (int i = 1; i <= 10000; i++) {
+            Goods goods = new Goods("商品" + i, "商品描述" + i,
+                    i, new GoodsCategory(i % 2 + 1), new Shop(1), 500 + i * 100);
+            goodsDao.insert(goods);
+            GoodsImage goodsImage = new GoodsImage(goods, "/admin/img/goods_" + (i % 19 + 1) + ".jpg");
+            goodsImageDao.insert(goodsImage);
+        }
+    }
+
+    private SqlSession session;
+
     @Before
-    public void init() {
-        categoryDao = new GoodsCategoryDaoImpl();
-        customerDao = new CustomerDaoImpl();
-        sellerDao = new SellerDaoImpl();
-        shopDao = new ShopDaoImpl();
-        goodsDao = new GoodsDaoImpl();
-        goodsImageDao = new GoodsImageDaoImpl();
-        attrNameDao = new AttrNameDaoImpl();
-        attrValueDao = new AttrValueDaoImpl();
-        attrCombDao = new AttrCombDaoImpl();
-        ordersDao = new OrdersDaoImpl();
-        ordersDetailDao = new OrdersDetailDaoImpl();
-        cartDao = new CartDaoImpl();
-        evaluateDao = new EvaluateDaoImpl();
-//        areaDao = new AreaDaoImpl();
-        addressDao = new AddressDaoImpl();
+    public void init() throws Exception {
+        InputStream is = Resources.getResourceAsStream("SqlMapConfig.xml");
+        session = new SqlSessionFactoryBuilder().build(is).openSession();
+        MybatisUtil.initDao(this, session);
+    }
+
+    @After
+    public void close() {
+        session.commit();
+        session.close();
     }
 
     private Date d(String date) {

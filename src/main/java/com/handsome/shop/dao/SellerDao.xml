@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.handsome.shop.dao.SellerDao">
+
+
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+    <!-- +++++++++++++ 以下是MybatisCreator生成的默认方法 +++++++++++++ -->
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+
+    <sql id="whereSql">
+        <where>
+            <if test="sellerId!=null">
+                AND sellerId=#{sellerId}
+            </if>
+            <if test="phone!=null">
+                AND phone=#{phone}
+            </if>
+            <if test="password!=null">
+                AND password=#{password}
+            </if>
+            <if test="realName!=null">
+                AND realName=#{realName}
+            </if>
+            <if test="nickname!=null">
+                AND nickname=#{nickname}
+            </if>
+            <if test="gender!=null">
+                AND gender=#{gender}
+            </if>
+            <if test="headUrl!=null">
+                AND headUrl=#{headUrl}
+            </if>
+        </where>
+    </sql>
+
+    <insert id="insert" parameterType="com.handsome.shop.bean.Seller">
+        INSERT INTO Seller(
+        sellerId,phone,password,realName,nickname,gender,headUrl
+        ) VALUES (
+        #{sellerId},#{phone},#{password},#{realName},#{nickname},#{gender},#{headUrl}
+        )
+        <selectKey keyProperty="sellerId" resultType="int">
+            SELECT sequence_Seller.currval FROM dual
+        </selectKey>
+    </insert>
+
+    <delete id="deleteById" parameterType="long">
+        DELETE FROM Seller WHERE sellerId=#{id}
+    </delete>
+
+    <update id="update" parameterType="com.handsome.shop.bean.Seller">
+        UPDATE Seller
+        <set>
+            <if test="sellerId!=null">
+            sellerId=#{sellerId},
+            </if>
+            <if test="phone!=null">
+            phone=#{phone},
+            </if>
+            <if test="password!=null">
+            password=#{password},
+            </if>
+            <if test="realName!=null">
+            realName=#{realName},
+            </if>
+            <if test="nickname!=null">
+            nickname=#{nickname},
+            </if>
+            <if test="gender!=null">
+            gender=#{gender},
+            </if>
+            <if test="headUrl!=null">
+            headUrl=#{headUrl},
+            </if>
+        </set>
+        WHERE sellerId=#{sellerId}
+    </update>
+
+    <!--必须在全局配置中设置<setting username="jdbcTypeForNull" value="NULL"/>，否则报错-->
+    <update id="updateContainsNull">
+        UPDATE Seller SET
+            sellerId=#{sellerId},
+            phone=#{phone},
+            password=#{password},
+            realName=#{realName},
+            nickname=#{nickname},
+            gender=#{gender},
+            headUrl=#{headUrl}
+        WHERE sellerId=#{sellerId}
+    </update>
+
+    <select id="queryById" parameterType="long" resultType="com.handsome.shop.bean.Seller">
+        SELECT * FROM Seller WHERE sellerId=#{id}
+    </select>
+
+    <select id="queryAll" resultType="com.handsome.shop.bean.Seller">
+        SELECT * FROM Seller
+    </select>
+
+    <select id="queryAllLimit" resultType="com.handsome.shop.bean.Seller">
+        SELECT * FROM (SELECT full_result_set.*,rownum rn FROM (
+
+        SELECT * FROM Seller
+
+        ) full_result_set WHERE rownum<![CDATA[<=]]>${arg0+arg1}
+        ) WHERE rn>${arg0}
+    </select>
+
+    <select id="queryAllCount" resultType="int">
+        SELECT count(1) FROM Seller
+    </select>
+
+    <select id="query" resultType="com.handsome.shop.bean.Seller">
+        SELECT * FROM Seller
+        <include refid="whereSql"/>
+    </select>
+
+    <select id="queryLimit" parameterType="com.handsome.shop.bean.Seller" resultType="com.handsome.shop.bean.Seller">
+        SELECT * FROM (SELECT full_result_set.*,rownum rn FROM (
+
+        SELECT * FROM Seller
+        <where>
+            <if test="arg0.sellerId!=null">
+                AND sellerId=#{arg0.sellerId}
+            </if>
+            <if test="arg0.phone!=null">
+                AND phone=#{arg0.phone}
+            </if>
+            <if test="arg0.password!=null">
+                AND password=#{arg0.password}
+            </if>
+            <if test="arg0.realName!=null">
+                AND realName=#{arg0.realName}
+            </if>
+            <if test="arg0.nickname!=null">
+                AND nickname=#{arg0.nickname}
+            </if>
+            <if test="arg0.gender!=null">
+                AND gender=#{arg0.gender}
+            </if>
+            <if test="arg0.headUrl!=null">
+                AND headUrl=#{arg0.headUrl}
+            </if>
+        </where>
+
+        ) full_result_set WHERE rownum<![CDATA[<=]]>${arg1+arg2}
+        ) WHERE rn>${arg1}
+    </select>
+
+    <select id="queryCount" resultType="int">
+        SELECT count(1) FROM Seller
+        <include refid="whereSql"/>
+    </select>
+
+</mapper>

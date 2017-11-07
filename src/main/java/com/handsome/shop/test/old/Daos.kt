@@ -1,4 +1,4 @@
-package com.handsome.shop.test
+package com.handsome.shop.test.old
 
 import com.handsome.shop.bean.*
 import com.wangrj.java_lib.db3.BaseDao
@@ -90,4 +90,20 @@ class AttrCombDaoImpl : HandsomeDao<AttrComb>(), AttrCombDao {
         )
         return insert(attrComb)
     }
+
+    //        categoryDao = new GoodsCategoryDaoImpl();
+//        customerDao = new CustomerDaoImpl();
+//        sellerDao = new SellerDaoImpl();
+//        shopDao = new ShopDaoImpl();
+//        goodsDao = new GoodsDaoImpl();
+//        goodsImageDao = new GoodsImageDaoImpl();
+//        attrNameDao = new AttrNameDaoImpl();
+//        attrValueDao = new AttrValueDaoImpl();
+//        attrCombDao = new AttrCombDaoImpl();
+//        ordersDao = new OrdersDaoImpl();
+//        ordersDetailDao = new OrdersDetailDaoImpl();
+//        cartDao = new CartDaoImpl();
+//        evaluateDao = new EvaluateDaoImpl();
+//        areaDao = new AreaDaoImpl();
+//        addressDao = new AddressDaoImpl();
 }

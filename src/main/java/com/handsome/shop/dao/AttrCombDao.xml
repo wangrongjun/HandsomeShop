@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.handsome.shop.dao.AttrCombDao">
+
+
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+    <!-- +++++++++++++ 以下是MybatisCreator生成的默认方法 +++++++++++++ -->
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+    <resultMap id="defaultMap" type="com.handsome.shop.bean.AttrComb">
+        <id column="attrCombId" property="attrCombId"/>
+        <result column="price" property="price"/>
+        <result column="remainCount" property="remainCount"/>
+        <association property="goods" javaType="com.handsome.shop.bean.Goods">
+            <id column="goods" property="goodsId"/>
+        </association>
+        <association property="attrValue1" javaType="com.handsome.shop.bean.AttrValue">
+            <id column="attrValue1" property="attrValueId"/>
+        </association>
+        <association property="attrValue2" javaType="com.handsome.shop.bean.AttrValue">
+            <id column="attrValue2" property="attrValueId"/>
+        </association>
+        <association property="attrValue3" javaType="com.handsome.shop.bean.AttrValue">
+            <id column="attrValue3" property="attrValueId"/>
+        </association>
+        <association property="attrValue4" javaType="com.handsome.shop.bean.AttrValue">
+            <id column="attrValue4" property="attrValueId"/>
+        </association>
+        <association property="attrValue5" javaType="com.handsome.shop.bean.AttrValue">
+            <id column="attrValue5" property="attrValueId"/>
+        </association>
+        <association property="attrValue6" javaType="com.handsome.shop.bean.AttrValue">
+            <id column="attrValue6" property="attrValueId"/>
+        </association>
+        <association property="attrValue7" javaType="com.handsome.shop.bean.AttrValue">
+            <id column="attrValue7" property="attrValueId"/>
+        </association>
+        <association property="attrValue8" javaType="com.handsome.shop.bean.AttrValue">
+            <id column="attrValue8" property="attrValueId"/>
+        </association>
+        <association property="attrValue9" javaType="com.handsome.shop.bean.AttrValue">
+            <id column="attrValue9" property="attrValueId"/>
+        </association>
+    </resultMap>
+
+    <sql id="whereSql">
+        <where>
+            <if test="attrCombId!=null">
+                AND attrCombId=#{attrCombId}
+            </if>
+            <if test="goods!=null">
+                AND goods=#{goods.goodsId}
+            </if>
+            <if test="price!=null">
+                AND price=#{price}
+            </if>
+            <if test="remainCount!=null">
+                AND remainCount=#{remainCount}
+            </if>
+            <if test="attrValue1!=null">
+                AND attrValue1=#{attrValue1.attrValueId}
+            </if>
+            <if test="attrValue2!=null">
+                AND attrValue2=#{attrValue2.attrValueId}
+            </if>
+            <if test="attrValue3!=null">
+                AND attrValue3=#{attrValue3.attrValueId}
+            </if>
+            <if test="attrValue4!=null">
+                AND attrValue4=#{attrValue4.attrValueId}
+            </if>
+            <if test="attrValue5!=null">
+                AND attrValue5=#{attrValue5.attrValueId}
+            </if>
+            <if test="attrValue6!=null">
+                AND attrValue6=#{attrValue6.attrValueId}
+            </if>
+            <if test="attrValue7!=null">
+                AND attrValue7=#{attrValue7.attrValueId}
+            </if>
+            <if test="attrValue8!=null">
+                AND attrValue8=#{attrValue8.attrValueId}
+            </if>
+            <if test="attrValue9!=null">
+                AND attrValue9=#{attrValue9.attrValueId}
+            </if>
+        </where>
+    </sql>
+
+    <insert id="insert" parameterType="com.handsome.shop.bean.AttrComb">
+        INSERT INTO AttrComb(
+        attrCombId,goods,price,remainCount,attrValue1,attrValue2,attrValue3,attrValue4,attrValue5,attrValue6,attrValue7,attrValue8,attrValue9
+        ) VALUES (
+        #{attrCombId},#{goods.goodsId},#{price},#{remainCount},#{attrValue1.attrValueId},#{attrValue2.attrValueId},#{attrValue3.attrValueId},#{attrValue4.attrValueId},#{attrValue5.attrValueId},#{attrValue6.attrValueId},#{attrValue7.attrValueId},#{attrValue8.attrValueId},#{attrValue9.attrValueId}
+        )
+        <selectKey keyProperty="attrCombId" resultType="int">
+            SELECT sequence_AttrComb.currval FROM dual
+        </selectKey>
+    </insert>
+
+    <delete id="deleteById" parameterType="long">
+        DELETE FROM AttrComb WHERE attrCombId=#{id}
+    </delete>
+
+    <update id="update" parameterType="com.handsome.shop.bean.AttrComb">
+        UPDATE AttrComb
+        <set>
+            <if test="attrCombId!=null">
+            attrCombId=#{attrCombId},
+            </if>
+            <if test="goods!=null">
+            goods=#{goods.goodsId},
+            </if>
+            <if test="price!=null">
+            price=#{price},
+            </if>
+            <if test="remainCount!=null">
+            remainCount=#{remainCount},
+            </if>
+            <if test="attrValue1!=null">
+            attrValue1=#{attrValue1.attrValueId},
+            </if>
+            <if test="attrValue2!=null">
+            attrValue2=#{attrValue2.attrValueId},
+            </if>
+            <if test="attrValue3!=null">
+            attrValue3=#{attrValue3.attrValueId},
+            </if>
+            <if test="attrValue4!=null">
+            attrValue4=#{attrValue4.attrValueId},
+            </if>
+            <if test="attrValue5!=null">
+            attrValue5=#{attrValue5.attrValueId},
+            </if>
+            <if test="attrValue6!=null">
+            attrValue6=#{attrValue6.attrValueId},
+            </if>
+            <if test="attrValue7!=null">
+            attrValue7=#{attrValue7.attrValueId},
+            </if>
+            <if test="attrValue8!=null">
+            attrValue8=#{attrValue8.attrValueId},
+            </if>
+            <if test="attrValue9!=null">
+            attrValue9=#{attrValue9.attrValueId},
+            </if>
+        </set>
+        WHERE attrCombId=#{attrCombId}
+    </update>
+
+    <!--必须在全局配置中设置<setting username="jdbcTypeForNull" value="NULL"/>，否则报错-->
+    <update id="updateContainsNull">
+        UPDATE AttrComb SET
+            attrCombId=#{attrCombId},
+            goods=#{goods.goodsId},
+            price=#{price},
+            remainCount=#{remainCount},
+            attrValue1=#{attrValue1.attrValueId},
+            attrValue2=#{attrValue2.attrValueId},
+            attrValue3=#{attrValue3.attrValueId},
+            attrValue4=#{attrValue4.attrValueId},
+            attrValue5=#{attrValue5.attrValueId},
+            attrValue6=#{attrValue6.attrValueId},
+            attrValue7=#{attrValue7.attrValueId},
+            attrValue8=#{attrValue8.attrValueId},
+            attrValue9=#{attrValue9.attrValueId}
+        WHERE attrCombId=#{attrCombId}
+    </update>
+
+    <select id="queryById" parameterType="long" resultMap="defaultMap">
+        SELECT * FROM AttrComb WHERE attrCombId=#{id}
+    </select>
+
+    <select id="queryAll" resultMap="defaultMap">
+        SELECT * FROM AttrComb
+    </select>
+
+    <select id="queryAllLimit" resultMap="defaultMap">
+        SELECT * FROM (SELECT full_result_set.*,rownum rn FROM (
+
+        SELECT * FROM AttrComb
+
+        ) full_result_set WHERE rownum<![CDATA[<=]]>${arg0+arg1}
+        ) WHERE rn>${arg0}
+    </select>
+
+    <select id="queryAllCount" resultType="int">
+        SELECT count(1) FROM AttrComb
+    </select>
+
+    <select id="query" resultMap="defaultMap">
+        SELECT * FROM AttrComb
+        <include refid="whereSql"/>
+    </select>
+
+    <select id="queryLimit" parameterType="com.handsome.shop.bean.AttrComb" resultMap="defaultMap">
+        SELECT * FROM (SELECT full_result_set.*,rownum rn FROM (
+
+        SELECT * FROM AttrComb
+        <where>
+            <if test="arg0.attrCombId!=null">
+                AND attrCombId=#{arg0.attrCombId}
+            </if>
+            <if test="arg0.goods!=null">
+                AND goods=#{arg0.goods.goodsId}
+            </if>
+            <if test="arg0.price!=null">
+                AND price=#{arg0.price}
+            </if>
+            <if test="arg0.remainCount!=null">
+                AND remainCount=#{arg0.remainCount}
+            </if>
+            <if test="arg0.attrValue1!=null">
+                AND attrValue1=#{arg0.attrValue1.attrValueId}
+            </if>
+            <if test="arg0.attrValue2!=null">
+                AND attrValue2=#{arg0.attrValue2.attrValueId}
+            </if>
+            <if test="arg0.attrValue3!=null">
+                AND attrValue3=#{arg0.attrValue3.attrValueId}
+            </if>
+            <if test="arg0.attrValue4!=null">
+                AND attrValue4=#{arg0.attrValue4.attrValueId}
+            </if>
+            <if test="arg0.attrValue5!=null">
+                AND attrValue5=#{arg0.attrValue5.attrValueId}
+            </if>
+            <if test="arg0.attrValue6!=null">
+                AND attrValue6=#{arg0.attrValue6.attrValueId}
+            </if>
+            <if test="arg0.attrValue7!=null">
+                AND attrValue7=#{arg0.attrValue7.attrValueId}
+            </if>
+            <if test="arg0.attrValue8!=null">
+                AND attrValue8=#{arg0.attrValue8.attrValueId}
+            </if>
+            <if test="arg0.attrValue9!=null">
+                AND attrValue9=#{arg0.attrValue9.attrValueId}
+            </if>
+        </where>
+
+        ) full_result_set WHERE rownum<![CDATA[<=]]>${arg1+arg2}
+        ) WHERE rn>${arg1}
+    </select>
+
+    <select id="queryCount" resultType="int">
+        SELECT count(1) FROM AttrComb
+        <include refid="whereSql"/>
+    </select>
+
+</mapper>

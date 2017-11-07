@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.handsome.shop.dao.OrdersDao">
+
+
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+    <!-- +++++++++++++ 以下是MybatisCreator生成的默认方法 +++++++++++++ -->
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+    <resultMap id="defaultMap" type="com.handsome.shop.bean.Orders">
+        <id column="ordersId" property="ordersId"/>
+        <result column="totalPrice" property="totalPrice"/>
+        <result column="freight" property="freight"/>
+        <result column="note" property="note"/>
+        <result column="receiverPhone" property="receiverPhone"/>
+        <result column="receiverName" property="receiverName"/>
+        <result column="address" property="address"/>
+        <result column="createTime" property="createTime"/>
+        <result column="state" property="state"/>
+        <association property="customer" javaType="com.handsome.shop.bean.Customer">
+            <id column="customer" property="customerId"/>
+        </association>
+    </resultMap>
+
+    <sql id="whereSql">
+        <where>
+            <if test="ordersId!=null">
+                AND ordersId=#{ordersId}
+            </if>
+            <if test="customer!=null">
+                AND customer=#{customer.customerId}
+            </if>
+            <if test="totalPrice!=null">
+                AND totalPrice=#{totalPrice}
+            </if>
+            <if test="freight!=null">
+                AND freight=#{freight}
+            </if>
+            <if test="note!=null">
+                AND note=#{note}
+            </if>
+            <if test="receiverPhone!=null">
+                AND receiverPhone=#{receiverPhone}
+            </if>
+            <if test="receiverName!=null">
+                AND receiverName=#{receiverName}
+            </if>
+            <if test="address!=null">
+                AND address=#{address}
+            </if>
+            <if test="createTime!=null">
+                AND createTime=#{createTime}
+            </if>
+            <if test="state!=null">
+                AND state=#{state}
+            </if>
+        </where>
+    </sql>
+
+    <insert id="insert" parameterType="com.handsome.shop.bean.Orders">
+        INSERT INTO Orders(
+        ordersId,customer,totalPrice,freight,note,receiverPhone,receiverName,address,createTime,state
+        ) VALUES (
+        #{ordersId},#{customer.customerId},#{totalPrice},#{freight},#{note},#{receiverPhone},#{receiverName},#{address},#{createTime},#{state}
+        )
+        <selectKey keyProperty="ordersId" resultType="int">
+            SELECT sequence_Orders.currval FROM dual
+        </selectKey>
+    </insert>
+
+    <delete id="deleteById" parameterType="long">
+        DELETE FROM Orders WHERE ordersId=#{id}
+    </delete>
+
+    <update id="update" parameterType="com.handsome.shop.bean.Orders">
+        UPDATE Orders
+        <set>
+            <if test="ordersId!=null">
+            ordersId=#{ordersId},
+            </if>
+            <if test="customer!=null">
+            customer=#{customer.customerId},
+            </if>
+            <if test="totalPrice!=null">
+            totalPrice=#{totalPrice},
+            </if>
+            <if test="freight!=null">
+            freight=#{freight},
+            </if>
+            <if test="note!=null">
+            note=#{note},
+            </if>
+            <if test="receiverPhone!=null">
+            receiverPhone=#{receiverPhone},
+            </if>
+            <if test="receiverName!=null">
+            receiverName=#{receiverName},
+            </if>
+            <if test="address!=null">
+            address=#{address},
+            </if>
+            <if test="createTime!=null">
+            createTime=#{createTime},
+            </if>
+            <if test="state!=null">
+            state=#{state},
+            </if>
+        </set>
+        WHERE ordersId=#{ordersId}
+    </update>
+
+    <!--必须在全局配置中设置<setting username="jdbcTypeForNull" value="NULL"/>，否则报错-->
+    <update id="updateContainsNull">
+        UPDATE Orders SET
+            ordersId=#{ordersId},
+            customer=#{customer.customerId},
+            totalPrice=#{totalPrice},
+            freight=#{freight},
+            note=#{note},
+            receiverPhone=#{receiverPhone},
+            receiverName=#{receiverName},
+            address=#{address},
+            createTime=#{createTime},
+            state=#{state}
+        WHERE ordersId=#{ordersId}
+    </update>
+
+    <select id="queryById" parameterType="long" resultMap="defaultMap">
+        SELECT * FROM Orders WHERE ordersId=#{id}
+    </select>
+
+    <select id="queryAll" resultMap="defaultMap">
+        SELECT * FROM Orders
+    </select>
+
+    <select id="queryAllLimit" resultMap="defaultMap">
+        SELECT * FROM (SELECT full_result_set.*,rownum rn FROM (
+
+        SELECT * FROM Orders
+
+        ) full_result_set WHERE rownum<![CDATA[<=]]>${arg0+arg1}
+        ) WHERE rn>${arg0}
+    </select>
+
+    <select id="queryAllCount" resultType="int">
+        SELECT count(1) FROM Orders
+    </select>
+
+    <select id="query" resultMap="defaultMap">
+        SELECT * FROM Orders
+        <include refid="whereSql"/>
+    </select>
+
+    <select id="queryLimit" parameterType="com.handsome.shop.bean.Orders" resultMap="defaultMap">
+        SELECT * FROM (SELECT full_result_set.*,rownum rn FROM (
+
+        SELECT * FROM Orders
+        <where>
+            <if test="arg0.ordersId!=null">
+                AND ordersId=#{arg0.ordersId}
+            </if>
+            <if test="arg0.customer!=null">
+                AND customer=#{arg0.customer.customerId}
+            </if>
+            <if test="arg0.totalPrice!=null">
+                AND totalPrice=#{arg0.totalPrice}
+            </if>
+            <if test="arg0.freight!=null">
+                AND freight=#{arg0.freight}
+            </if>
+            <if test="arg0.note!=null">
+                AND note=#{arg0.note}
+            </if>
+            <if test="arg0.receiverPhone!=null">
+                AND receiverPhone=#{arg0.receiverPhone}
+            </if>
+            <if test="arg0.receiverName!=null">
+                AND receiverName=#{arg0.receiverName}
+            </if>
+            <if test="arg0.address!=null">
+                AND address=#{arg0.address}
+            </if>
+            <if test="arg0.createTime!=null">
+                AND createTime=#{arg0.createTime}
+            </if>
+            <if test="arg0.state!=null">
+                AND state=#{arg0.state}
+            </if>
+        </where>
+
+        ) full_result_set WHERE rownum<![CDATA[<=]]>${arg1+arg2}
+        ) WHERE rn>${arg1}
+    </select>
+
+    <select id="queryCount" resultType="int">
+        SELECT count(1) FROM Orders
+        <include refid="whereSql"/>
+    </select>
+
+</mapper>

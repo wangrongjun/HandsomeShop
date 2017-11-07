@@ -10,27 +10,26 @@
 <html>
 <head>
     <title>${requestScope.goods.goodsName}</title>
-    <link rel="stylesheet" type="text/css" href="css/bootstrap.min-3.2.0.css"/>
-    <link rel="stylesheet" type="text/css" href="css/luara.left.css"/>
-    <link rel="stylesheet" type="text/css" href="css/goods_info.css"/>
-    <link rel="stylesheet" type="text/css" href="css/header_content_footer.css"/>
-    <script src="js/jquery.min-1.9.0.js"></script>
-    <script src="js/bootstrap.min-3.2.0.js"></script>
-    <script src="js/jquery.luara.0.0.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/bootstrap.min-3.2.0.css"/>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/luara.left.css"/>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/goods_info.css"/>
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/header_content_footer.css"/>
+    <script src="${pageContext.request.contextPath}/js/jquery.min-1.9.0.js"></script>
+    <script src="${pageContext.request.contextPath}/js/bootstrap.min-3.2.0.js"></script>
+    <script src="${pageContext.request.contextPath}/js/jquery.luara.0.0.1.min.js"></script>
 </head>
 <body onload="showMsg('${requestScope.msg}')">
 
-<jsp:include page="header.jsp"/>
+<%--<jsp:include page="/header.jsp"/>--%>
 
 <content>
 
     <div class="top">
         <div class="img_box">
             <ul>
-                <%--<c:forEach var="image" items="${requestScope.goods.goodsImageList}">--%>
-                    <%--<li><img src="${image.imageUrl}"></li>--%>
-                <%--</c:forEach>--%>
-                    <li><img src="admin/img/goods_1.jpg"></li>
+                <c:forEach var="image" items="${requestScope.goods.goodsImageList}">
+                    <li><img src="${image.imageUrl}"></li>
+                </c:forEach>
             </ul>
             <ol>
                 <c:forEach var="image" items="${requestScope.goods.goodsImageList}">
@@ -56,7 +55,7 @@
                 </div>
                 <div class="goods_type">
                     商品类型：
-                    <span id="goods_type">${requestScope.goods.goodsType.name}</span>
+                    <span id="goods_type">${requestScope.goods.goodsCategory.name}</span>
                 </div>
             </div>
 

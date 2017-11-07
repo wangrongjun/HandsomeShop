@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.handsome.shop.dao.OrdersDetailDao">
+
+
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+    <!-- +++++++++++++ 以下是MybatisCreator生成的默认方法 +++++++++++++ -->
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+    <resultMap id="defaultMap" type="com.handsome.shop.bean.OrdersDetail">
+        <id column="detailId" property="detailId"/>
+        <result column="goodsName" property="goodsName"/>
+        <result column="goodsCount" property="goodsCount"/>
+        <result column="goodsPrice" property="goodsPrice"/>
+        <association property="orders" javaType="com.handsome.shop.bean.Orders">
+            <id column="orders" property="ordersId"/>
+        </association>
+        <association property="goods" javaType="com.handsome.shop.bean.Goods">
+            <id column="goods" property="goodsId"/>
+        </association>
+    </resultMap>
+
+    <sql id="whereSql">
+        <where>
+            <if test="detailId!=null">
+                AND detailId=#{detailId}
+            </if>
+            <if test="orders!=null">
+                AND orders=#{orders.ordersId}
+            </if>
+            <if test="goods!=null">
+                AND goods=#{goods.goodsId}
+            </if>
+            <if test="goodsName!=null">
+                AND goodsName=#{goodsName}
+            </if>
+            <if test="goodsCount!=null">
+                AND goodsCount=#{goodsCount}
+            </if>
+            <if test="goodsPrice!=null">
+                AND goodsPrice=#{goodsPrice}
+            </if>
+        </where>
+    </sql>
+
+    <insert id="insert" parameterType="com.handsome.shop.bean.OrdersDetail">
+        INSERT INTO OrdersDetail(
+        detailId,orders,goods,goodsName,goodsCount,goodsPrice
+        ) VALUES (
+        #{detailId},#{orders.ordersId},#{goods.goodsId},#{goodsName},#{goodsCount},#{goodsPrice}
+        )
+        <selectKey keyProperty="detailId" resultType="int">
+            SELECT sequence_OrdersDetail.currval FROM dual
+        </selectKey>
+    </insert>
+
+    <delete id="deleteById" parameterType="long">
+        DELETE FROM OrdersDetail WHERE detailId=#{id}
+    </delete>
+
+    <update id="update" parameterType="com.handsome.shop.bean.OrdersDetail">
+        UPDATE OrdersDetail
+        <set>
+            <if test="detailId!=null">
+            detailId=#{detailId},
+            </if>
+            <if test="orders!=null">
+            orders=#{orders.ordersId},
+            </if>
+            <if test="goods!=null">
+            goods=#{goods.goodsId},
+            </if>
+            <if test="goodsName!=null">
+            goodsName=#{goodsName},
+            </if>
+            <if test="goodsCount!=null">
+            goodsCount=#{goodsCount},
+            </if>
+            <if test="goodsPrice!=null">
+            goodsPrice=#{goodsPrice},
+            </if>
+        </set>
+        WHERE detailId=#{detailId}
+    </update>
+
+    <!--必须在全局配置中设置<setting username="jdbcTypeForNull" value="NULL"/>，否则报错-->
+    <update id="updateContainsNull">
+        UPDATE OrdersDetail SET
+            detailId=#{detailId},
+            orders=#{orders.ordersId},
+            goods=#{goods.goodsId},
+            goodsName=#{goodsName},
+            goodsCount=#{goodsCount},
+            goodsPrice=#{goodsPrice}
+        WHERE detailId=#{detailId}
+    </update>
+
+    <select id="queryById" parameterType="long" resultMap="defaultMap">
+        SELECT * FROM OrdersDetail WHERE detailId=#{id}
+    </select>
+
+    <select id="queryAll" resultMap="defaultMap">
+        SELECT * FROM OrdersDetail
+    </select>
+
+    <select id="queryAllLimit" resultMap="defaultMap">
+        SELECT * FROM (SELECT full_result_set.*,rownum rn FROM (
+
+        SELECT * FROM OrdersDetail
+
+        ) full_result_set WHERE rownum<![CDATA[<=]]>${arg0+arg1}
+        ) WHERE rn>${arg0}
+    </select>
+
+    <select id="queryAllCount" resultType="int">
+        SELECT count(1) FROM OrdersDetail
+    </select>
+
+    <select id="query" resultMap="defaultMap">
+        SELECT * FROM OrdersDetail
+        <include refid="whereSql"/>
+    </select>
+
+    <select id="queryLimit" parameterType="com.handsome.shop.bean.OrdersDetail" resultMap="defaultMap">
+        SELECT * FROM (SELECT full_result_set.*,rownum rn FROM (
+
+        SELECT * FROM OrdersDetail
+        <where>
+            <if test="arg0.detailId!=null">
+                AND detailId=#{arg0.detailId}
+            </if>
+            <if test="arg0.orders!=null">
+                AND orders=#{arg0.orders.ordersId}
+            </if>
+            <if test="arg0.goods!=null">
+                AND goods=#{arg0.goods.goodsId}
+            </if>
+            <if test="arg0.goodsName!=null">
+                AND goodsName=#{arg0.goodsName}
+            </if>
+            <if test="arg0.goodsCount!=null">
+                AND goodsCount=#{arg0.goodsCount}
+            </if>
+            <if test="arg0.goodsPrice!=null">
+                AND goodsPrice=#{arg0.goodsPrice}
+            </if>
+        </where>
+
+        ) full_result_set WHERE rownum<![CDATA[<=]]>${arg1+arg2}
+        ) WHERE rn>${arg1}
+    </select>
+
+    <select id="queryCount" resultType="int">
+        SELECT count(1) FROM OrdersDetail
+        <include refid="whereSql"/>
+    </select>
+
+</mapper>

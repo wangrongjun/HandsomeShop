@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.handsome.shop.dao.GoodsDao">
+
+    <select id="queryAllLimit" resultMap="queryMap">
+        SELECT * FROM (SELECT full_result_set.*,rownum rn FROM (
+
+            SELECT *
+            FROM (SELECT row_number() over(partition by g.goodsId order by i.imageId) row_number,
+            g.*,
+            i.*
+            FROM Goods g
+            JOIN GoodsImage i
+            ON g.goodsId = i.goods) temp
+            WHERE temp.row_number = 1
+
+        ) full_result_set WHERE rownum<![CDATA[<=]]>#{arg1}
+        ) WHERE rn>#{arg0}
+    </select>
+
+    <select id="queryById" parameterType="long" resultMap="queryMap">
+        SELECT * FROM Goods g
+        JOIN GoodsCategory c ON g.goodsCategory=c.categoryId
+        JOIN GoodsImage i ON g.goodsId=i.goods
+        JOIN Shop shop ON g.shop=shop.shopId
+        JOIN Seller seller ON shop.seller=seller.sellerId
+        WHERE goodsId=#{id}
+    </select>
+
+    <resultMap id="queryMap" type="com.handsome.shop.bean.Goods">
+        <id column="goodsId" property="goodsId"/>
+        <result column="goodsName" property="goodsName"/>
+        <result column="description" property="description"/>
+        <result column="remainCount" property="remainCount"/>
+        <result column="price" property="price"/>
+        <association property="goodsCategory" javaType="com.handsome.shop.bean.GoodsCategory">
+            <id column="goodsCategory" property="categoryId"/>
+            <result column="name" property="name"/>
+        </association>
+        <association property="shop" javaType="com.handsome.shop.bean.Shop">
+            <id column="shop" property="shopId"/>
+            <association property="seller" javaType="com.handsome.shop.bean.Seller">
+                <id column="sellerId" property="sellerId"/>
+                <result column="phone" property="phone"/>
+                <result column="realName" property="realName"/>
+                <result column="nickname" property="nickname"/>
+                <result column="gender" property="gender"/>
+                <result column="headUrl" property="headUrl"/>
+            </association>
+        </association>
+        <collection property="goodsImageList" ofType="com.handsome.shop.bean.GoodsImage">
+            <result column="imageUrl" property="imageUrl"/>
+        </collection>
+    </resultMap>
+
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+    <!-- +++++++++++++ 以下是MybatisCreator生成的默认方法 +++++++++++++ -->
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+    <resultMap id="defaultMap" type="com.handsome.shop.bean.Goods">
+        <id column="goodsId" property="goodsId"/>
+        <result column="goodsName" property="goodsName"/>
+        <result column="description" property="description"/>
+        <result column="remainCount" property="remainCount"/>
+        <result column="price" property="price"/>
+        <association property="goodsCategory" javaType="com.handsome.shop.bean.GoodsCategory">
+            <id column="goodsCategory" property="categoryId"/>
+        </association>
+        <association property="shop" javaType="com.handsome.shop.bean.Shop">
+            <id column="shop" property="shopId"/>
+        </association>
+    </resultMap>
+
+    <sql id="whereSql">
+        <where>
+            <if test="goodsId!=null">
+                AND goodsId=#{goodsId}
+            </if>
+            <if test="goodsName!=null">
+                AND goodsName=#{goodsName}
+            </if>
+            <if test="description!=null">
+                AND description=#{description}
+            </if>
+            <if test="remainCount!=null">
+                AND remainCount=#{remainCount}
+            </if>
+            <if test="goodsCategory!=null">
+                AND goodsCategory=#{goodsCategory.categoryId}
+            </if>
+            <if test="shop!=null">
+                AND shop=#{shop.shopId}
+            </if>
+            <if test="price!=null">
+                AND price=#{price}
+            </if>
+        </where>
+    </sql>
+
+    <insert id="insert" parameterType="com.handsome.shop.bean.Goods">
+        INSERT INTO Goods(
+        goodsId,goodsName,description,remainCount,goodsCategory,shop,price
+        ) VALUES (
+        #{goodsId},#{goodsName},#{description},#{remainCount},#{goodsCategory.categoryId},#{shop.shopId},#{price}
+        )
+        <selectKey keyProperty="goodsId" resultType="int">
+            SELECT sequence_Goods.currval FROM dual
+        </selectKey>
+    </insert>
+
+    <delete id="deleteById" parameterType="long">
+        DELETE FROM Goods WHERE goodsId=#{id}
+    </delete>
+
+    <update id="update" parameterType="com.handsome.shop.bean.Goods">
+        UPDATE Goods
+        <set>
+            <if test="goodsId!=null">
+                goodsId=#{goodsId},
+            </if>
+            <if test="goodsName!=null">
+                goodsName=#{goodsName},
+            </if>
+            <if test="description!=null">
+                description=#{description},
+            </if>
+            <if test="remainCount!=null">
+                remainCount=#{remainCount},
+            </if>
+            <if test="goodsCategory!=null">
+                goodsCategory=#{goodsCategory.categoryId},
+            </if>
+            <if test="shop!=null">
+                shop=#{shop.shopId},
+            </if>
+            <if test="price!=null">
+                price=#{price},
+            </if>
+        </set>
+        WHERE goodsId=#{goodsId}
+    </update>
+
+    <!--必须在全局配置中设置<setting username="jdbcTypeForNull" value="NULL"/>，否则报错-->
+    <update id="updateContainsNull">
+        UPDATE Goods SET
+            goodsId=#{goodsId},
+            goodsName=#{goodsName},
+            description=#{description},
+            remainCount=#{remainCount},
+            goodsCategory=#{goodsCategory.categoryId},
+            shop=#{shop.shopId},
+            price=#{price}
+        WHERE goodsId=#{goodsId}
+    </update>
+
+    <!--<select id="queryById" parameterType="long" resultMap="defaultMap">-->
+        <!--SELECT * FROM Goods WHERE goodsId=#{id}-->
+    <!--</select>-->
+
+    <select id="queryAll" resultMap="defaultMap">
+        SELECT * FROM Goods
+    </select>
+
+    <!--<select id="queryAllLimit" resultMap="defaultMap">-->
+        <!--SELECT * FROM (SELECT full_result_set.*,rownum rn FROM (-->
+
+        <!--SELECT * FROM Goods-->
+
+        <!--) full_result_set WHERE rownum<![CDATA[<=]]>${arg0+arg1}-->
+        <!--) WHERE rn>${arg0}-->
+    <!--</select>-->
+
+    <select id="queryAllCount" resultType="int">
+        SELECT count(1) FROM Goods
+    </select>
+
+    <select id="query" resultMap="defaultMap">
+        SELECT * FROM Goods
+        <include refid="whereSql"/>
+    </select>
+
+    <select id="queryLimit" parameterType="com.handsome.shop.bean.Goods" resultMap="defaultMap">
+        SELECT * FROM (SELECT full_result_set.*,rownum rn FROM (
+
+        SELECT * FROM Goods
+        <where>
+            <if test="arg0.goodsId!=null">
+                AND goodsId=#{arg0.goodsId}
+            </if>
+            <if test="arg0.goodsName!=null">
+                AND goodsName=#{arg0.goodsName}
+            </if>
+            <if test="arg0.description!=null">
+                AND description=#{arg0.description}
+            </if>
+            <if test="arg0.remainCount!=null">
+                AND remainCount=#{arg0.remainCount}
+            </if>
+            <if test="arg0.goodsCategory!=null">
+                AND goodsCategory=#{arg0.goodsCategory.categoryId}
+            </if>
+            <if test="arg0.shop!=null">
+                AND shop=#{arg0.shop.shopId}
+            </if>
+            <if test="arg0.price!=null">
+                AND price=#{arg0.price}
+            </if>
+        </where>
+
+        ) full_result_set WHERE rownum<![CDATA[<=]]>${arg1+arg2}
+        ) WHERE rn>${arg1}
+    </select>
+
+    <select id="queryCount" resultType="int">
+        SELECT count(1) FROM Goods
+        <include refid="whereSql"/>
+    </select>
+
+</mapper>

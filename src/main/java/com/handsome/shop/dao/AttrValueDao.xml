@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.handsome.shop.dao.AttrValueDao">
+
+
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+    <!-- +++++++++++++ 以下是MybatisCreator生成的默认方法 +++++++++++++ -->
+    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
+    <resultMap id="defaultMap" type="com.handsome.shop.bean.AttrValue">
+        <id column="attrValueId" property="attrValueId"/>
+        <result column="attrValue" property="attrValue"/>
+        <association property="attrName" javaType="com.handsome.shop.bean.AttrName">
+            <id column="attrName" property="attrNameId"/>
+        </association>
+    </resultMap>
+
+    <sql id="whereSql">
+        <where>
+            <if test="attrValueId!=null">
+                AND attrValueId=#{attrValueId}
+            </if>
+            <if test="attrValue!=null">
+                AND attrValue=#{attrValue}
+            </if>
+            <if test="attrName!=null">
+                AND attrName=#{attrName.attrNameId}
+            </if>
+        </where>
+    </sql>
+
+    <insert id="insert" parameterType="com.handsome.shop.bean.AttrValue">
+        INSERT INTO AttrValue(
+        attrValueId,attrValue,attrName
+        ) VALUES (
+        #{attrValueId},#{attrValue},#{attrName.attrNameId}
+        )
+        <selectKey keyProperty="attrValueId" resultType="int">
+            SELECT sequence_AttrValue.currval FROM dual
+        </selectKey>
+    </insert>
+
+    <delete id="deleteById" parameterType="long">
+        DELETE FROM AttrValue WHERE attrValueId=#{id}
+    </delete>
+
+    <update id="update" parameterType="com.handsome.shop.bean.AttrValue">
+        UPDATE AttrValue
+        <set>
+            <if test="attrValueId!=null">
+            attrValueId=#{attrValueId},
+            </if>
+            <if test="attrValue!=null">
+            attrValue=#{attrValue},
+            </if>
+            <if test="attrName!=null">
+            attrName=#{attrName.attrNameId},
+            </if>
+        </set>
+        WHERE attrValueId=#{attrValueId}
+    </update>
+
+    <!--必须在全局配置中设置<setting username="jdbcTypeForNull" value="NULL"/>，否则报错-->
+    <update id="updateContainsNull">
+        UPDATE AttrValue SET
+            attrValueId=#{attrValueId},
+            attrValue=#{attrValue},
+            attrName=#{attrName.attrNameId}
+        WHERE attrValueId=#{attrValueId}
+    </update>
+
+    <select id="queryById" parameterType="long" resultMap="defaultMap">
+        SELECT * FROM AttrValue WHERE attrValueId=#{id}
+    </select>
+
+    <select id="queryAll" resultMap="defaultMap">
+        SELECT * FROM AttrValue
+    </select>
+
+    <select id="queryAllLimit" resultMap="defaultMap">
+        SELECT * FROM (SELECT full_result_set.*,rownum rn FROM (
+
+        SELECT * FROM AttrValue
+
+        ) full_result_set WHERE rownum<![CDATA[<=]]>${arg0+arg1}
+        ) WHERE rn>${arg0}
+    </select>
+
+    <select id="queryAllCount" resultType="int">
+        SELECT count(1) FROM AttrValue
+    </select>
+
+    <select id="query" resultMap="defaultMap">
+        SELECT * FROM AttrValue
+        <include refid="whereSql"/>
+    </select>
+
+    <select id="queryLimit" parameterType="com.handsome.shop.bean.AttrValue" resultMap="defaultMap">
+        SELECT * FROM (SELECT full_result_set.*,rownum rn FROM (
+
+        SELECT * FROM AttrValue
+        <where>
+            <if test="arg0.attrValueId!=null">
+                AND attrValueId=#{arg0.attrValueId}
+            </if>
+            <if test="arg0.attrValue!=null">
+                AND attrValue=#{arg0.attrValue}
+            </if>
+            <if test="arg0.attrName!=null">
+                AND attrName=#{arg0.attrName.attrNameId}
+            </if>
+        </where>
+
+        ) full_result_set WHERE rownum<![CDATA[<=]]>${arg1+arg2}
+        ) WHERE rn>${arg1}
+    </select>
+
+    <select id="queryCount" resultType="int">
+        SELECT count(1) FROM AttrValue
+        <include refid="whereSql"/>
+    </select>
+
+</mapper>
