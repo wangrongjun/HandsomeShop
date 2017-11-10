@@ -17,6 +17,10 @@
     <!--<package name="com.handsome.shop.dao"/>-->
     <!--</typeAliases>-->
 
+    <plugins>
+        <plugin interceptor="com.github.pagehelper.PageInterceptor"/>
+    </plugins>
+
     <environments default="development">
         <environment id="development">
             <!--事务管理的类型-->

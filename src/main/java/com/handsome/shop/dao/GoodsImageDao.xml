@@ -83,8 +83,8 @@
 
         SELECT * FROM GoodsImage
 
-        ) full_result_set WHERE rownum<![CDATA[<=]]>${arg0+arg1}
-        ) WHERE rn>${arg0}
+        ) full_result_set WHERE rownum<![CDATA[<=]]>${offset + rowCount}
+        ) WHERE rn>${offset}
     </select>
 
     <select id="queryAllCount" resultType="int">
@@ -101,19 +101,19 @@
 
         SELECT * FROM GoodsImage
         <where>
-            <if test="arg0.imageId!=null">
-                AND imageId=#{arg0.imageId}
+            <if test="entity.imageId!=null">
+                AND imageId=#{entity.imageId}
             </if>
-            <if test="arg0.goods!=null">
-                AND goods=#{arg0.goods.goodsId}
+            <if test="entity.goods!=null">
+                AND goods=#{entity.goods.goodsId}
             </if>
-            <if test="arg0.imageUrl!=null">
-                AND imageUrl=#{arg0.imageUrl}
+            <if test="entity.imageUrl!=null">
+                AND imageUrl=#{entity.imageUrl}
             </if>
         </where>
 
-        ) full_result_set WHERE rownum<![CDATA[<=]]>${arg1+arg2}
-        ) WHERE rn>${arg1}
+        ) full_result_set WHERE rownum<![CDATA[<=]]>${offset + rowCount}
+        ) WHERE rn>${offset}
     </select>
 
     <select id="queryCount" resultType="int">

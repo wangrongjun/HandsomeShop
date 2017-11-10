@@ -99,8 +99,8 @@
 
         SELECT * FROM Shop
 
-        ) full_result_set WHERE rownum<![CDATA[<=]]>${arg0+arg1}
-        ) WHERE rn>${arg0}
+        ) full_result_set WHERE rownum<![CDATA[<=]]>${offset + rowCount}
+        ) WHERE rn>${offset}
     </select>
 
     <select id="queryAllCount" resultType="int">
@@ -117,25 +117,25 @@
 
         SELECT * FROM Shop
         <where>
-            <if test="arg0.shopId!=null">
-                AND shopId=#{arg0.shopId}
+            <if test="entity.shopId!=null">
+                AND shopId=#{entity.shopId}
             </if>
-            <if test="arg0.seller!=null">
-                AND seller=#{arg0.seller.sellerId}
+            <if test="entity.seller!=null">
+                AND seller=#{entity.seller.sellerId}
             </if>
-            <if test="arg0.shopName!=null">
-                AND shopName=#{arg0.shopName}
+            <if test="entity.shopName!=null">
+                AND shopName=#{entity.shopName}
             </if>
-            <if test="arg0.description!=null">
-                AND description=#{arg0.description}
+            <if test="entity.description!=null">
+                AND description=#{entity.description}
             </if>
-            <if test="arg0.headUrl!=null">
-                AND headUrl=#{arg0.headUrl}
+            <if test="entity.headUrl!=null">
+                AND headUrl=#{entity.headUrl}
             </if>
         </where>
 
-        ) full_result_set WHERE rownum<![CDATA[<=]]>${arg1+arg2}
-        ) WHERE rn>${arg1}
+        ) full_result_set WHERE rownum<![CDATA[<=]]>${offset + rowCount}
+        ) WHERE rn>${offset}
     </select>
 
     <select id="queryCount" resultType="int">

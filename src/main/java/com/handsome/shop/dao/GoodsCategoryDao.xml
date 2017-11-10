@@ -3,20 +3,13 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.handsome.shop.dao.GoodsCategoryDao">
 
-    <select id="queryAll" resultMap="queryAllMap">
-        SELECT * FROM GoodsCategory c1 JOIN GoodsCategory c2 WHERE c1.
-    </select>
+    <select id="queryWithChildrenById" parameterType="int" resultMap="defaultMap">
+        SELECT * FROM GoodsCategory WHERE categoryPath LIKE (
 
-    <resultMap id="queryAllMap" type="com.handsome.shop.bean.GoodsCategory">
-        <id column="categoryId" property="categoryId"/>
-        <result column="name" property="name"/>
-        <association property="superCategory" javaType="com.handsome.shop.bean.GoodsCategory">
-            <id column="superCategory" property="categoryId"/>
-        </association>
-        <collection property="children" ofType="com.handsome.shop.bean.GoodsCategory">
-            <id column="categoryId" property="categoryId"/>
-        </collection>
-    </resultMap>
+        SELECT concat(categoryPath,'%') FROM GoodsCategory WHERE categoryId=#{id}
+
+        )
+    </select>
 
     <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
     <!-- +++++++++++++ 以下是MybatisCreator生成的默认方法 +++++++++++++ -->
@@ -25,6 +18,8 @@
     <resultMap id="defaultMap" type="com.handsome.shop.bean.GoodsCategory">
         <id column="categoryId" property="categoryId"/>
         <result column="name" property="name"/>
+        <result column="categoryPath" property="categoryPath"/>
+        <result column="categoryDepth" property="categoryDepth"/>
         <association property="superCategory" javaType="com.handsome.shop.bean.GoodsCategory">
             <id column="superCategory" property="categoryId"/>
         </association>
@@ -41,14 +36,20 @@
             <if test="superCategory!=null">
                 AND superCategory=#{superCategory.categoryId}
             </if>
+            <if test="categoryPath!=null">
+                AND categoryPath=#{categoryPath}
+            </if>
+            <if test="categoryDepth!=null">
+                AND categoryDepth=#{categoryDepth}
+            </if>
         </where>
     </sql>
 
     <insert id="insert" parameterType="com.handsome.shop.bean.GoodsCategory">
         INSERT INTO GoodsCategory(
-        categoryId,name,superCategory
+        categoryId,name,superCategory,categoryPath,categoryDepth
         ) VALUES (
-        #{categoryId},#{name},#{superCategory.categoryId}
+        #{categoryId},#{name},#{superCategory.categoryId},#{categoryPath},#{categoryDepth}
         )
         <selectKey keyProperty="categoryId" resultType="int">
             SELECT sequence_GoodsCategory.currval FROM dual
@@ -71,6 +72,12 @@
             <if test="superCategory!=null">
                 superCategory=#{superCategory.categoryId},
             </if>
+            <if test="categoryPath!=null">
+                categoryPath=#{categoryPath},
+            </if>
+            <if test="categoryDepth!=null">
+                categoryDepth=#{categoryDepth},
+            </if>
         </set>
         WHERE categoryId=#{categoryId}
     </update>
@@ -80,7 +87,9 @@
         UPDATE GoodsCategory SET
             categoryId=#{categoryId},
             name=#{name},
-            superCategory=#{superCategory.categoryId}
+            superCategory=#{superCategory.categoryId},
+            categoryPath=#{categoryPath},
+            categoryDepth=#{categoryDepth}
         WHERE categoryId=#{categoryId}
     </update>
 
@@ -88,17 +97,17 @@
         SELECT * FROM GoodsCategory WHERE categoryId=#{id}
     </select>
 
-    <!--<select id="queryAll" resultMap="defaultMap">-->
-    <!--SELECT * FROM GoodsCategory-->
-    <!--</select>-->
+    <select id="queryAll" resultMap="defaultMap">
+        SELECT * FROM GoodsCategory
+    </select>
 
     <select id="queryAllLimit" resultMap="defaultMap">
         SELECT * FROM (SELECT full_result_set.*,rownum rn FROM (
 
         SELECT * FROM GoodsCategory
 
-        ) full_result_set WHERE rownum<![CDATA[<=]]>${arg0+arg1}
-        ) WHERE rn>${arg0}
+        ) full_result_set WHERE rownum<![CDATA[<=]]>${offset + rowCount}
+        ) WHERE rn>${offset}
     </select>
 
     <select id="queryAllCount" resultType="int">
@@ -115,19 +124,25 @@
 
         SELECT * FROM GoodsCategory
         <where>
-            <if test="arg0.categoryId!=null">
-                AND categoryId=#{arg0.categoryId}
+            <if test="entity.categoryId!=null">
+                AND categoryId=#{entity.categoryId}
             </if>
-            <if test="arg0.name!=null">
-                AND name=#{arg0.name}
+            <if test="entity.name!=null">
+                AND name=#{entity.name}
             </if>
-            <if test="arg0.superCategory!=null">
-                AND superCategory=#{arg0.superCategory.categoryId}
+            <if test="entity.superCategory!=null">
+                AND superCategory=#{entity.superCategory.categoryId}
+            </if>
+            <if test="entity.categoryPath!=null">
+                AND categoryPath=#{entity.categoryPath}
+            </if>
+            <if test="entity.categoryDepth!=null">
+                AND categoryDepth=#{entity.categoryDepth}
             </if>
         </where>
 
-        ) full_result_set WHERE rownum<![CDATA[<=]]>${arg1+arg2}
-        ) WHERE rn>${arg1}
+        ) full_result_set WHERE rownum<![CDATA[<=]]>${offset + rowCount}
+        ) WHERE rn>${offset}
     </select>
 
     <select id="queryCount" resultType="int">

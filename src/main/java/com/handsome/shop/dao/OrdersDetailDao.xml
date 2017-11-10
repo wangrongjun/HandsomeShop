@@ -109,8 +109,8 @@
 
         SELECT * FROM OrdersDetail
 
-        ) full_result_set WHERE rownum<![CDATA[<=]]>${arg0+arg1}
-        ) WHERE rn>${arg0}
+        ) full_result_set WHERE rownum<![CDATA[<=]]>${offset + rowCount}
+        ) WHERE rn>${offset}
     </select>
 
     <select id="queryAllCount" resultType="int">
@@ -127,28 +127,28 @@
 
         SELECT * FROM OrdersDetail
         <where>
-            <if test="arg0.detailId!=null">
-                AND detailId=#{arg0.detailId}
+            <if test="entity.detailId!=null">
+                AND detailId=#{entity.detailId}
             </if>
-            <if test="arg0.orders!=null">
-                AND orders=#{arg0.orders.ordersId}
+            <if test="entity.orders!=null">
+                AND orders=#{entity.orders.ordersId}
             </if>
-            <if test="arg0.goods!=null">
-                AND goods=#{arg0.goods.goodsId}
+            <if test="entity.goods!=null">
+                AND goods=#{entity.goods.goodsId}
             </if>
-            <if test="arg0.goodsName!=null">
-                AND goodsName=#{arg0.goodsName}
+            <if test="entity.goodsName!=null">
+                AND goodsName=#{entity.goodsName}
             </if>
-            <if test="arg0.goodsCount!=null">
-                AND goodsCount=#{arg0.goodsCount}
+            <if test="entity.goodsCount!=null">
+                AND goodsCount=#{entity.goodsCount}
             </if>
-            <if test="arg0.goodsPrice!=null">
-                AND goodsPrice=#{arg0.goodsPrice}
+            <if test="entity.goodsPrice!=null">
+                AND goodsPrice=#{entity.goodsPrice}
             </if>
         </where>
 
-        ) full_result_set WHERE rownum<![CDATA[<=]]>${arg1+arg2}
-        ) WHERE rn>${arg1}
+        ) full_result_set WHERE rownum<![CDATA[<=]]>${offset + rowCount}
+        ) WHERE rn>${offset}
     </select>
 
     <select id="queryCount" resultType="int">

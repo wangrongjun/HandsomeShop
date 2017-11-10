@@ -3,7 +3,6 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.handsome.shop.dao.OrdersDao">
 
-
     <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
     <!-- +++++++++++++ 以下是MybatisCreator生成的默认方法 +++++++++++++ -->
     <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
@@ -77,34 +76,34 @@
         UPDATE Orders
         <set>
             <if test="ordersId!=null">
-            ordersId=#{ordersId},
+                ordersId=#{ordersId},
             </if>
             <if test="customer!=null">
-            customer=#{customer.customerId},
+                customer=#{customer.customerId},
             </if>
             <if test="totalPrice!=null">
-            totalPrice=#{totalPrice},
+                totalPrice=#{totalPrice},
             </if>
             <if test="freight!=null">
-            freight=#{freight},
+                freight=#{freight},
             </if>
             <if test="note!=null">
-            note=#{note},
+                note=#{note},
             </if>
             <if test="receiverPhone!=null">
-            receiverPhone=#{receiverPhone},
+                receiverPhone=#{receiverPhone},
             </if>
             <if test="receiverName!=null">
-            receiverName=#{receiverName},
+                receiverName=#{receiverName},
             </if>
             <if test="address!=null">
-            address=#{address},
+                address=#{address},
             </if>
             <if test="createTime!=null">
-            createTime=#{createTime},
+                createTime=#{createTime},
             </if>
             <if test="state!=null">
-            state=#{state},
+                state=#{state},
             </if>
         </set>
         WHERE ordersId=#{ordersId}
@@ -139,8 +138,8 @@
 
         SELECT * FROM Orders
 
-        ) full_result_set WHERE rownum<![CDATA[<=]]>${arg0+arg1}
-        ) WHERE rn>${arg0}
+        ) full_result_set WHERE rownum<![CDATA[<=]]>${offset + rowCount}
+        ) WHERE rn>${offset}
     </select>
 
     <select id="queryAllCount" resultType="int">
@@ -157,40 +156,40 @@
 
         SELECT * FROM Orders
         <where>
-            <if test="arg0.ordersId!=null">
-                AND ordersId=#{arg0.ordersId}
+            <if test="entity.ordersId!=null">
+                AND ordersId=#{entity.ordersId}
             </if>
-            <if test="arg0.customer!=null">
-                AND customer=#{arg0.customer.customerId}
+            <if test="entity.customer!=null">
+                AND customer=#{entity.customer.customerId}
             </if>
-            <if test="arg0.totalPrice!=null">
-                AND totalPrice=#{arg0.totalPrice}
+            <if test="entity.totalPrice!=null">
+                AND totalPrice=#{entity.totalPrice}
             </if>
-            <if test="arg0.freight!=null">
-                AND freight=#{arg0.freight}
+            <if test="entity.freight!=null">
+                AND freight=#{entity.freight}
             </if>
-            <if test="arg0.note!=null">
-                AND note=#{arg0.note}
+            <if test="entity.note!=null">
+                AND note=#{entity.note}
             </if>
-            <if test="arg0.receiverPhone!=null">
-                AND receiverPhone=#{arg0.receiverPhone}
+            <if test="entity.receiverPhone!=null">
+                AND receiverPhone=#{entity.receiverPhone}
             </if>
-            <if test="arg0.receiverName!=null">
-                AND receiverName=#{arg0.receiverName}
+            <if test="entity.receiverName!=null">
+                AND receiverName=#{entity.receiverName}
             </if>
-            <if test="arg0.address!=null">
-                AND address=#{arg0.address}
+            <if test="entity.address!=null">
+                AND address=#{entity.address}
             </if>
-            <if test="arg0.createTime!=null">
-                AND createTime=#{arg0.createTime}
+            <if test="entity.createTime!=null">
+                AND createTime=#{entity.createTime}
             </if>
-            <if test="arg0.state!=null">
-                AND state=#{arg0.state}
+            <if test="entity.state!=null">
+                AND state=#{entity.state}
             </if>
         </where>
 
-        ) full_result_set WHERE rownum<![CDATA[<=]]>${arg1+arg2}
-        ) WHERE rn>${arg1}
+        ) full_result_set WHERE rownum<![CDATA[<=]]>${offset + rowCount}
+        ) WHERE rn>${offset}
     </select>
 
     <select id="queryCount" resultType="int">

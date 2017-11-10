@@ -1,16 +1,12 @@
 package com.handsome.shop.controller;
 
-import com.handsome.shop.bean.Goods;
-import com.handsome.shop.bean.GoodsCategory;
-import com.handsome.shop.dao.GoodsCategoryDao;
-import com.handsome.shop.dao.GoodsDao;
+import com.handsome.shop.service.IndexService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
-import java.util.List;
 
 /**
  * by wangrongjun on 2017/11/2.
@@ -19,20 +15,30 @@ import java.util.List;
 public class IndexController {
 
     @Resource
-    private GoodsDao goodsDao;
-    @Resource
-    private GoodsCategoryDao categoryDao;
+    private IndexService service;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public ModelAndView showIndex() {
-        ModelAndView mav = new ModelAndView("/WEB-INF/page/index.jsp");
+        String categoryListJson = service.getCategoryListJson();
+        String foodGoodsListJson = service.getGoodsListJson("食品");// 只查询前8条数据
+        String electricGoodsListJson = service.getGoodsListJson("电子产品");// 只是查询前8条数据
 
-        List<Goods> goodsList = goodsDao.queryAllLimit(0, 8);
-        mav.addObject("double11GoodsList", goodsList);
+        return new ModelAndView("index").
+                addObject("categoryListJson", categoryListJson).
+                addObject("foodGoodsListJson", foodGoodsListJson).
+                addObject("electricGoodsListJson", electricGoodsListJson);
+    }
 
-        List<GoodsCategory> categoryList = categoryDao.queryAll();
+    @RequestMapping(value = "/withoutCache", method = RequestMethod.GET)
+    public ModelAndView showIndexWithoutCache() {
+        String categoryListJson = service.getCategoryListJsonWithoutCache();
+        String foodGoodsListJson = service.getGoodsListJsonWithoutCache("食品");
+        String electricGoodsListJson = service.getGoodsListJsonWithoutCache("电子产品");
 
-        return mav;
+        return new ModelAndView("index").
+                addObject("categoryListJson", categoryListJson).
+                addObject("foodGoodsListJson", foodGoodsListJson).
+                addObject("electricGoodsListJson", electricGoodsListJson);
     }
 
 }

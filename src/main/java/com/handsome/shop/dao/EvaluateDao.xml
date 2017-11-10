@@ -3,6 +3,34 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.handsome.shop.dao.EvaluateDao">
 
+    <select id="queryByGoodsId" resultMap="queryByGoodsIdMap">
+        SELECT e.*, c.*
+        FROM Evaluate e
+        JOIN OrdersDetail d
+        ON e.ordersDetail=d.detailId
+        JOIN Orders o
+        ON d.orders=o.ordersId
+        JOIN Customer c
+        ON o.customer=c.customerId
+        WHERE d.goods=#{id}
+    </select>
+
+    <resultMap id="queryByGoodsIdMap" type="com.handsome.shop.bean.Evaluate">
+        <id column="evaluateId" property="evaluateId"/>
+        <result column="content" property="content"/>
+        <result column="evaluateLevel" property="evaluateLevel"/>
+        <result column="createTime" property="createTime"/>
+        <association property="ordersDetail" javaType="com.handsome.shop.bean.OrdersDetail">
+            <association property="orders" javaType="com.handsome.shop.bean.Orders">
+                <association property="customer" javaType="com.handsome.shop.bean.Customer">
+                    <id column="customerId" property="customerId"/>
+                    <result column="headUrl" property="headUrl"/>
+                    <result column="gender" property="gender"/>
+                    <result column="nickname" property="nickname"/>
+                </association>
+            </association>
+        </association>
+    </resultMap>
 
     <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
     <!-- +++++++++++++ 以下是MybatisCreator生成的默认方法 +++++++++++++ -->
@@ -57,19 +85,19 @@
         UPDATE Evaluate
         <set>
             <if test="evaluateId!=null">
-            evaluateId=#{evaluateId},
+                evaluateId=#{evaluateId},
             </if>
             <if test="ordersDetail!=null">
-            ordersDetail=#{ordersDetail.detailId},
+                ordersDetail=#{ordersDetail.detailId},
             </if>
             <if test="content!=null">
-            content=#{content},
+                content=#{content},
             </if>
             <if test="evaluateLevel!=null">
-            evaluateLevel=#{evaluateLevel},
+                evaluateLevel=#{evaluateLevel},
             </if>
             <if test="createTime!=null">
-            createTime=#{createTime},
+                createTime=#{createTime},
             </if>
         </set>
         WHERE evaluateId=#{evaluateId}
@@ -99,8 +127,8 @@
 
         SELECT * FROM Evaluate
 
-        ) full_result_set WHERE rownum<![CDATA[<=]]>${arg0+arg1}
-        ) WHERE rn>${arg0}
+        ) full_result_set WHERE rownum<![CDATA[<=]]>${offset + rowCount}
+        ) WHERE rn>${offset}
     </select>
 
     <select id="queryAllCount" resultType="int">
@@ -117,25 +145,25 @@
 
         SELECT * FROM Evaluate
         <where>
-            <if test="arg0.evaluateId!=null">
-                AND evaluateId=#{arg0.evaluateId}
+            <if test="entity.evaluateId!=null">
+                AND evaluateId=#{entity.evaluateId}
             </if>
-            <if test="arg0.ordersDetail!=null">
-                AND ordersDetail=#{arg0.ordersDetail.detailId}
+            <if test="entity.ordersDetail!=null">
+                AND ordersDetail=#{entity.ordersDetail.detailId}
             </if>
-            <if test="arg0.content!=null">
-                AND content=#{arg0.content}
+            <if test="entity.content!=null">
+                AND content=#{entity.content}
             </if>
-            <if test="arg0.evaluateLevel!=null">
-                AND evaluateLevel=#{arg0.evaluateLevel}
+            <if test="entity.evaluateLevel!=null">
+                AND evaluateLevel=#{entity.evaluateLevel}
             </if>
-            <if test="arg0.createTime!=null">
-                AND createTime=#{arg0.createTime}
+            <if test="entity.createTime!=null">
+                AND createTime=#{entity.createTime}
             </if>
         </where>
 
-        ) full_result_set WHERE rownum<![CDATA[<=]]>${arg1+arg2}
-        ) WHERE rn>${arg1}
+        ) full_result_set WHERE rownum<![CDATA[<=]]>${offset + rowCount}
+        ) WHERE rn>${offset}
     </select>
 
     <select id="queryCount" resultType="int">

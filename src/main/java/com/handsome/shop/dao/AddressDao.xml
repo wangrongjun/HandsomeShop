@@ -93,8 +93,8 @@
 
         SELECT * FROM Address
 
-        ) full_result_set WHERE rownum<![CDATA[<=]]>${arg0+arg1}
-        ) WHERE rn>${arg0}
+        ) full_result_set WHERE rownum<![CDATA[<=]]>${offset + rowCount}
+        ) WHERE rn>${offset}
     </select>
 
     <select id="queryAllCount" resultType="int">
@@ -111,22 +111,22 @@
 
         SELECT * FROM Address
         <where>
-            <if test="arg0.addressId!=null">
-                AND addressId=#{arg0.addressId}
+            <if test="entity.addressId!=null">
+                AND addressId=#{entity.addressId}
             </if>
-            <if test="arg0.customer!=null">
-                AND customer=#{arg0.customer.customerId}
+            <if test="entity.customer!=null">
+                AND customer=#{entity.customer.customerId}
             </if>
-            <if test="arg0.area!=null">
-                AND area=#{arg0.area.areaId}
+            <if test="entity.area!=null">
+                AND area=#{entity.area.areaId}
             </if>
-            <if test="arg0.street!=null">
-                AND street=#{arg0.street}
+            <if test="entity.street!=null">
+                AND street=#{entity.street}
             </if>
         </where>
 
-        ) full_result_set WHERE rownum<![CDATA[<=]]>${arg1+arg2}
-        ) WHERE rn>${arg1}
+        ) full_result_set WHERE rownum<![CDATA[<=]]>${offset + rowCount}
+        ) WHERE rn>${offset}
     </select>
 
     <select id="queryCount" resultType="int">

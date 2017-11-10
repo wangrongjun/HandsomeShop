@@ -17,7 +17,7 @@ public class AttrComb {
     @ManyToOne
     private Goods goods;
     private Double price;
-    private Integer remainCount;
+    private Integer remainCount;// 库存
     @ManyToOne
     private AttrValue attrValue1;
     @ManyToOne

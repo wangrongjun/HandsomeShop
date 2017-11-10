@@ -104,8 +104,8 @@
 
         SELECT * FROM Customer
 
-        ) full_result_set WHERE rownum<![CDATA[<=]]>${arg0+arg1}
-        ) WHERE rn>${arg0}
+        ) full_result_set WHERE rownum<![CDATA[<=]]>${offset + rowCount}
+        ) WHERE rn>${offset}
     </select>
 
     <select id="queryAllCount" resultType="int">
@@ -122,31 +122,31 @@
 
         SELECT * FROM Customer
         <where>
-            <if test="arg0.customerId!=null">
-                AND customerId=#{arg0.customerId}
+            <if test="entity.customerId!=null">
+                AND customerId=#{entity.customerId}
             </if>
-            <if test="arg0.phone!=null">
-                AND phone=#{arg0.phone}
+            <if test="entity.phone!=null">
+                AND phone=#{entity.phone}
             </if>
-            <if test="arg0.password!=null">
-                AND password=#{arg0.password}
+            <if test="entity.password!=null">
+                AND password=#{entity.password}
             </if>
-            <if test="arg0.realName!=null">
-                AND realName=#{arg0.realName}
+            <if test="entity.realName!=null">
+                AND realName=#{entity.realName}
             </if>
-            <if test="arg0.nickname!=null">
-                AND nickname=#{arg0.nickname}
+            <if test="entity.nickname!=null">
+                AND nickname=#{entity.nickname}
             </if>
-            <if test="arg0.gender!=null">
-                AND gender=#{arg0.gender}
+            <if test="entity.gender!=null">
+                AND gender=#{entity.gender}
             </if>
-            <if test="arg0.headUrl!=null">
-                AND headUrl=#{arg0.headUrl}
+            <if test="entity.headUrl!=null">
+                AND headUrl=#{entity.headUrl}
             </if>
         </where>
 
-        ) full_result_set WHERE rownum<![CDATA[<=]]>${arg1+arg2}
-        ) WHERE rn>${arg1}
+        ) full_result_set WHERE rownum<![CDATA[<=]]>${offset + rowCount}
+        ) WHERE rn>${offset}
     </select>
 
     <select id="queryCount" resultType="int">

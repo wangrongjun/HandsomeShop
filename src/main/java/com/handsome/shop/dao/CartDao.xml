@@ -93,8 +93,8 @@
 
         SELECT * FROM Cart
 
-        ) full_result_set WHERE rownum<![CDATA[<=]]>${arg0+arg1}
-        ) WHERE rn>${arg0}
+        ) full_result_set WHERE rownum<![CDATA[<=]]>${offset + rowCount}
+        ) WHERE rn>${offset}
     </select>
 
     <select id="queryAllCount" resultType="int">
@@ -111,22 +111,22 @@
 
         SELECT * FROM Cart
         <where>
-            <if test="arg0.carId!=null">
-                AND carId=#{arg0.carId}
+            <if test="entity.carId!=null">
+                AND carId=#{entity.carId}
             </if>
-            <if test="arg0.customer!=null">
-                AND customer=#{arg0.customer.customerId}
+            <if test="entity.customer!=null">
+                AND customer=#{entity.customer.customerId}
             </if>
-            <if test="arg0.goods!=null">
-                AND goods=#{arg0.goods.goodsId}
+            <if test="entity.goods!=null">
+                AND goods=#{entity.goods.goodsId}
             </if>
-            <if test="arg0.count!=null">
-                AND count=#{arg0.count}
+            <if test="entity.count!=null">
+                AND count=#{entity.count}
             </if>
         </where>
 
-        ) full_result_set WHERE rownum<![CDATA[<=]]>${arg1+arg2}
-        ) WHERE rn>${arg1}
+        ) full_result_set WHERE rownum<![CDATA[<=]]>${offset + rowCount}
+        ) WHERE rn>${offset}
     </select>
 
     <select id="queryCount" resultType="int">

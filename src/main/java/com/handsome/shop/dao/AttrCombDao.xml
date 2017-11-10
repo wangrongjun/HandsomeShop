@@ -3,6 +3,27 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.handsome.shop.dao.AttrCombDao">
 
+    <select id="queryByGoodsId" resultMap="queryByGoodsIdMap">
+
+    </select>
+
+    <resultMap id="queryByGoodsIdMap" type="com.handsome.shop.bean.AttrComb">
+        <id column="attrCombId" property="attrCombId"/>
+        <result column="price" property="price"/>
+        <result column="remainCount" property="remainCount"/>
+        <association property="goods" javaType="com.handsome.shop.bean.Goods">
+            <id column="goods" property="goodsId"/>
+        </association>
+        <association property="attrValue1" javaType="com.handsome.shop.bean.AttrValue">
+            <id column="attrValue1" property="attrValueId"/>
+        </association>
+        <association property="attrValue2" javaType="com.handsome.shop.bean.AttrValue">
+            <id column="attrValue2" property="attrValueId"/>
+        </association>
+        <association property="attrValue3" javaType="com.handsome.shop.bean.AttrValue">
+            <id column="attrValue3" property="attrValueId"/>
+        </association>
+    </resultMap>
 
     <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
     <!-- +++++++++++++ 以下是MybatisCreator生成的默认方法 +++++++++++++ -->
@@ -181,8 +202,8 @@
 
         SELECT * FROM AttrComb
 
-        ) full_result_set WHERE rownum<![CDATA[<=]]>${arg0+arg1}
-        ) WHERE rn>${arg0}
+        ) full_result_set WHERE rownum<![CDATA[<=]]>${offset + rowCount}
+        ) WHERE rn>${offset}
     </select>
 
     <select id="queryAllCount" resultType="int">
@@ -199,49 +220,49 @@
 
         SELECT * FROM AttrComb
         <where>
-            <if test="arg0.attrCombId!=null">
-                AND attrCombId=#{arg0.attrCombId}
+            <if test="entity.attrCombId!=null">
+                AND attrCombId=#{entity.attrCombId}
             </if>
-            <if test="arg0.goods!=null">
-                AND goods=#{arg0.goods.goodsId}
+            <if test="entity.goods!=null">
+                AND goods=#{entity.goods.goodsId}
             </if>
-            <if test="arg0.price!=null">
-                AND price=#{arg0.price}
+            <if test="entity.price!=null">
+                AND price=#{entity.price}
             </if>
-            <if test="arg0.remainCount!=null">
-                AND remainCount=#{arg0.remainCount}
+            <if test="entity.remainCount!=null">
+                AND remainCount=#{entity.remainCount}
             </if>
-            <if test="arg0.attrValue1!=null">
-                AND attrValue1=#{arg0.attrValue1.attrValueId}
+            <if test="entity.attrValue1!=null">
+                AND attrValue1=#{entity.attrValue1.attrValueId}
             </if>
-            <if test="arg0.attrValue2!=null">
-                AND attrValue2=#{arg0.attrValue2.attrValueId}
+            <if test="entity.attrValue2!=null">
+                AND attrValue2=#{entity.attrValue2.attrValueId}
             </if>
-            <if test="arg0.attrValue3!=null">
-                AND attrValue3=#{arg0.attrValue3.attrValueId}
+            <if test="entity.attrValue3!=null">
+                AND attrValue3=#{entity.attrValue3.attrValueId}
             </if>
-            <if test="arg0.attrValue4!=null">
-                AND attrValue4=#{arg0.attrValue4.attrValueId}
+            <if test="entity.attrValue4!=null">
+                AND attrValue4=#{entity.attrValue4.attrValueId}
             </if>
-            <if test="arg0.attrValue5!=null">
-                AND attrValue5=#{arg0.attrValue5.attrValueId}
+            <if test="entity.attrValue5!=null">
+                AND attrValue5=#{entity.attrValue5.attrValueId}
             </if>
-            <if test="arg0.attrValue6!=null">
-                AND attrValue6=#{arg0.attrValue6.attrValueId}
+            <if test="entity.attrValue6!=null">
+                AND attrValue6=#{entity.attrValue6.attrValueId}
             </if>
-            <if test="arg0.attrValue7!=null">
-                AND attrValue7=#{arg0.attrValue7.attrValueId}
+            <if test="entity.attrValue7!=null">
+                AND attrValue7=#{entity.attrValue7.attrValueId}
             </if>
-            <if test="arg0.attrValue8!=null">
-                AND attrValue8=#{arg0.attrValue8.attrValueId}
+            <if test="entity.attrValue8!=null">
+                AND attrValue8=#{entity.attrValue8.attrValueId}
             </if>
-            <if test="arg0.attrValue9!=null">
-                AND attrValue9=#{arg0.attrValue9.attrValueId}
+            <if test="entity.attrValue9!=null">
+                AND attrValue9=#{entity.attrValue9.attrValueId}
             </if>
         </where>
 
-        ) full_result_set WHERE rownum<![CDATA[<=]]>${arg1+arg2}
-        ) WHERE rn>${arg1}
+        ) full_result_set WHERE rownum<![CDATA[<=]]>${offset + rowCount}
+        ) WHERE rn>${offset}
     </select>
 
     <select id="queryCount" resultType="int">

@@ -4,6 +4,7 @@ import com.handsome.shop.bean.*;
 import com.handsome.shop.dao.*;
 import com.wangrj.java_lib.db3.DbUtil;
 import com.wangrj.java_lib.java_util.DateUtil;
+import com.wangrj.java_lib.java_util.LogUtil;
 import com.wangrj.java_lib.mybatis.MybatisUtil;
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;
@@ -42,6 +43,27 @@ public class DaoTest {
 
     @Test
     public void testQuery() {
+
+        LogUtil.printEntity(evaluateDao.queryByGoodsId(1));
+
+//        LogUtil.printEntity(categoryDao.queryWithChildrenById(1));
+//        LogUtil.printEntity(categoryDao.queryWithChildrenById(5));
+//        LogUtil.printEntity(categoryDao.queryAll());
+
+//        LogUtil.printEntity(goodsDao.queryById(1));
+
+//        PageHelper.startPage(1, 2);
+//        LogUtil.printEntity(goodsDao.queryByFirstCategoryId("电子产品"));
+//        PageHelper.startPage(2, 2);
+//        LogUtil.printEntity(goodsDao.queryByFirstCategoryId("电子产品"));
+
+//        PageHelper.startPage(1, 2);
+//        LogUtil.printEntity(goodsDao.queryBySecondCategoryId("手机"));
+//        PageHelper.startPage(2, 2);
+//        LogUtil.printEntity(goodsDao.queryBySecondCategoryId("手机"));
+
+//        LogUtil.printEntity(categoryDao.queryAll());
+
 //        LogUtil.printEntity(customerDao.queryByPhone("15521302230"));
 //        LogUtil.printEntity(customerDao.countGender());
 //
@@ -73,19 +95,6 @@ public class DaoTest {
     }
 
     @Test
-    public void testUpdate() {
-//        HibernateDao.buildSessionFactory();
-//
-//        String s = "newHeadUrl: " + MathUtil.random(0, 100);
-//        System.out.println(s);
-//        customerDao.updateHeadUrl(31, s);
-//        Customer customer = customerDao.queryById(31);
-//        System.out.println(customer.getHeadUrl());
-//
-//        HibernateDao.closeSessionFactory();
-    }
-
-    @Test
     public void testInsert() throws Exception {
         testDropAndCreate();
 
@@ -101,46 +110,53 @@ public class DaoTest {
         Shop 生鲜店 = new Shop(李四, "生鲜店", "各种新鲜水果，蔬菜应有尽有！", "/admin/img/shop_3.jpg");
         Shop 零食店 = new Shop(李四, "零食店", "吃货预备营！", "/admin/img/shop_4.jpg");
 
-        GoodsCategory 电子产品 = new GoodsCategory("电子产品", null);
-        GoodsCategory 手机 = new GoodsCategory("手机", 电子产品);
-        GoodsCategory 笔记本 = new GoodsCategory("笔记本", 电子产品);
-        GoodsCategory 移动电源 = new GoodsCategory("移动电源", 电子产品);
+        GoodsCategory 电子产品 = new GoodsCategory("电子产品", null, "1/", 1);
+        GoodsCategory 手机 = new GoodsCategory("手机", 电子产品, "1/2/", 2);
+        GoodsCategory 笔记本 = new GoodsCategory("笔记本", 电子产品, "1/3/", 2);
+        GoodsCategory 移动电源 = new GoodsCategory("移动电源", 电子产品, "1/4/", 2);
         categoryDao.insert(电子产品);
         categoryDao.insert(手机);
         categoryDao.insert(笔记本);
         categoryDao.insert(移动电源);
 
-        GoodsCategory 食品 = new GoodsCategory("食品", null);
-        GoodsCategory 果蔬 = new GoodsCategory("果蔬", 食品);
-        GoodsCategory 零食 = new GoodsCategory("零食", 食品);
-        GoodsCategory 饮料 = new GoodsCategory("饮料", 食品);
+        GoodsCategory 食品 = new GoodsCategory("食品", null, "5/", 1);
+        GoodsCategory 果蔬 = new GoodsCategory("果蔬", 食品, "5/6/", 2);
+        GoodsCategory 零食 = new GoodsCategory("零食", 食品, "5/7/", 2);
+        GoodsCategory 饮料 = new GoodsCategory("饮料", 食品, "5/8/", 2);
         categoryDao.insert(食品);
         categoryDao.insert(果蔬);
         categoryDao.insert(零食);
         categoryDao.insert(饮料);
 
-        GoodsCategory 服装 = new GoodsCategory("服装", null);
-        GoodsCategory 男装 = new GoodsCategory("男装", 服装);
-        GoodsCategory 女装 = new GoodsCategory("女装", 服装);
-        GoodsCategory 童装 = new GoodsCategory("童装", 服装);
-        GoodsCategory 夏装 = new GoodsCategory("夏装", 服装);
-        GoodsCategory 冬装 = new GoodsCategory("冬装", 服装);
-        categoryDao.insert(服装);
-        categoryDao.insert(男装);
-        categoryDao.insert(女装);
-        categoryDao.insert(童装);
-        categoryDao.insert(夏装);
-        categoryDao.insert(冬装);
+        GoodsCategory 果汁 = new GoodsCategory("果汁", 饮料, "5/8/9/", 3);
+        GoodsCategory 汽水 = new GoodsCategory("汽水", 饮料, "5/8/10/", 3);
+        GoodsCategory 奶 = new GoodsCategory("奶", 饮料, "5/8/11/", 3);
+        categoryDao.insert(果汁);
+        categoryDao.insert(汽水);
+        categoryDao.insert(奶);
 
-        Goods 宏基笔记本 = new Goods("宏基笔记本", "Aspire最新版", 20, 笔记本, 东方电脑城, 3200);
-        Goods 苹果笔记本 = new Goods("苹果笔记本", "超薄迷你", 60, 笔记本, 东方电脑城, 5400);
-        Goods 三星E7手机 = new Goods("三星E7手机", "E7系列", 38, 手机, 手机旗舰店, 1500);
-        Goods iPhone7手机 = new Goods("iPhone7手机", "乔布斯呕心沥血之作！", 8, 手机, 手机旗舰店, 5000);
-        Goods 罗马士充电宝 = new Goods("罗马士充电宝", "大容量", 8, 手机, 手机旗舰店, 100);
+//        GoodsCategory 服装 = new GoodsCategory("服装", null);
+//        GoodsCategory 男装 = new GoodsCategory("男装", 服装);
+//        GoodsCategory 女装 = new GoodsCategory("女装", 服装);
+//        GoodsCategory 童装 = new GoodsCategory("童装", 服装);
+//        GoodsCategory 夏装 = new GoodsCategory("夏装", 服装);
+//        GoodsCategory 冬装 = new GoodsCategory("冬装", 服装);
+//        categoryDao.insert(服装);
+//        categoryDao.insert(男装);
+//        categoryDao.insert(女装);
+//        categoryDao.insert(童装);
+//        categoryDao.insert(夏装);
+//        categoryDao.insert(冬装);
+
+        Goods 宏基笔记本 = new Goods("宏基笔记本", "Aspire最新版", 20, 笔记本, 东方电脑城, 3200d);
+        Goods 苹果笔记本 = new Goods("苹果笔记本", "超薄迷你", 60, 笔记本, 东方电脑城, 5400d);
+        Goods 三星E7手机 = new Goods("三星E7手机", "E7系列", 38, 手机, 手机旗舰店, 1500d);
+        Goods iPhone7手机 = new Goods("iPhone7手机", "乔布斯呕心沥血之作！", 8, 手机, 手机旗舰店, 5000d);
+        Goods 罗马士充电宝 = new Goods("罗马士充电宝", "大容量", 8, 手机, 手机旗舰店, 100d);
         Goods 菜心 = new Goods("菜心", "新鲜的菜心，纯天然无农药", 200, 果蔬, 生鲜店, 7.5);
         Goods 苹果 = new Goods("苹果", "新鲜的苹果，纯天然无农药", 80, 果蔬, 生鲜店, 11.2);
         Goods 辣条 = new Goods("辣条", "老外都抢着吃，欲购从速！", 250, 零食, 零食店, 2.5);
-        Goods 可乐 = new Goods("可乐", "透心凉，心飞扬！", 300, 饮料, 零食店, 5);
+        Goods 可乐 = new Goods("可乐", "透心凉，心飞扬！", 300, 饮料, 零食店, 5d);
 
         sellerDao.insert(张三);
         sellerDao.insert(李四);
@@ -271,6 +287,19 @@ public class DaoTest {
     }
 
     @Test
+    public void testUpdate() {
+//        HibernateDao.buildSessionFactory();
+//
+//        String s = "newHeadUrl: " + MathUtil.random(0, 100);
+//        System.out.println(s);
+//        customerDao.updateHeadUrl(31, s);
+//        Customer customer = customerDao.queryById(31);
+//        System.out.println(customer.getHeadUrl());
+//
+//        HibernateDao.closeSessionFactory();
+    }
+
+    @Test
     public void testDropAndCreate() throws ClassNotFoundException {
         List<Class> pojoClassList = new ArrayList<>();
         Field[] fields = getClass().getDeclaredFields();
@@ -291,9 +320,9 @@ public class DaoTest {
      */
     @Test
     public void testInsertUselessGoods() throws IOException {
-        for (int i = 1; i <= 10000; i++) {
+        for (int i = 1; i <= 100; i++) {
             Goods goods = new Goods("商品" + i, "商品描述" + i,
-                    i, new GoodsCategory(i % 2 + 1), new Shop(1), 500 + i * 100);
+                    i, new GoodsCategory(i % 11 + 1), new Shop(1), 500.0 + i * 100);
             goodsDao.insert(goods);
             GoodsImage goodsImage = new GoodsImage(goods, "/admin/img/goods_" + (i % 19 + 1) + ".jpg");
             goodsImageDao.insert(goodsImage);

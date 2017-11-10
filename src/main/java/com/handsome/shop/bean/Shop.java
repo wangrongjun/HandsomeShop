@@ -1,5 +1,7 @@
 package com.handsome.shop.bean;
 
+import org.hibernate.annotations.Check;
+
 import javax.persistence.*;
 
 /**

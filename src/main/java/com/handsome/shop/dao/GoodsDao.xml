@@ -3,24 +3,29 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.handsome.shop.dao.GoodsDao">
 
-    <select id="queryAllLimit" resultMap="queryMap">
-        SELECT * FROM (SELECT full_result_set.*,rownum rn FROM (
+    <!--根据分类id查询商品-->
+    <select id="queryByCategoryId" resultMap="queryMap">
+        SELECT * FROM (
 
-            SELECT *
-            FROM (SELECT row_number() over(partition by g.goodsId order by i.imageId) row_number,
+            SELECT row_number() over(partition by g.goodsId order by i.imageId) row_number,
             g.*,
             i.*
             FROM Goods g
             JOIN GoodsImage i
-            ON g.goodsId = i.goods) temp
-            WHERE temp.row_number = 1
+            ON g.goodsId = i.goods
+            WHERE g.goodsCategory IN (
+                SELECT categoryId FROM GoodsCategory WHERE categoryPath LIKE (
+                    SELECT concat(categoryPath,'%') FROM GoodsCategory WHERE name=#{categoryName}
+                )
+            )
 
-        ) full_result_set WHERE rownum<![CDATA[<=]]>#{arg1}
-        ) WHERE rn>#{arg0}
+        ) temp
+        WHERE temp.row_number = 1
     </select>
 
     <select id="queryById" parameterType="long" resultMap="queryMap">
-        SELECT * FROM Goods g
+        SELECT g.*, c.*, i.*, shop.*, seller.*, shop.description as shop_desc,seller.headUrl as seller_head
+        FROM Goods g
         JOIN GoodsCategory c ON g.goodsCategory=c.categoryId
         JOIN GoodsImage i ON g.goodsId=i.goods
         JOIN Shop shop ON g.shop=shop.shopId
@@ -39,14 +44,19 @@
             <result column="name" property="name"/>
         </association>
         <association property="shop" javaType="com.handsome.shop.bean.Shop">
-            <id column="shop" property="shopId"/>
+            <id column="shopId" property="shopId"/>
+            <id column="shopName" property="shopName"/>
+            <!--这里使用了别名-->
+            <id column="shop_desc" property="description"/>
+            <id column="headUrl" property="headUrl"/>
             <association property="seller" javaType="com.handsome.shop.bean.Seller">
                 <id column="sellerId" property="sellerId"/>
                 <result column="phone" property="phone"/>
                 <result column="realName" property="realName"/>
                 <result column="nickname" property="nickname"/>
                 <result column="gender" property="gender"/>
-                <result column="headUrl" property="headUrl"/>
+                <!--这里使用了别名-->
+                <result column="seller_head" property="headUrl"/>
             </association>
         </association>
         <collection property="goodsImageList" ofType="com.handsome.shop.bean.GoodsImage">
@@ -155,21 +165,21 @@
     </update>
 
     <!--<select id="queryById" parameterType="long" resultMap="defaultMap">-->
-        <!--SELECT * FROM Goods WHERE goodsId=#{id}-->
+    <!--SELECT * FROM Goods WHERE goodsId=#{id}-->
     <!--</select>-->
 
     <select id="queryAll" resultMap="defaultMap">
         SELECT * FROM Goods
     </select>
 
-    <!--<select id="queryAllLimit" resultMap="defaultMap">-->
-        <!--SELECT * FROM (SELECT full_result_set.*,rownum rn FROM (-->
+    <select id="queryAllLimit" resultMap="defaultMap">
+        SELECT * FROM (SELECT full_result_set.*,rownum rn FROM (
 
-        <!--SELECT * FROM Goods-->
+        SELECT * FROM Goods
 
-        <!--) full_result_set WHERE rownum<![CDATA[<=]]>${arg0+arg1}-->
-        <!--) WHERE rn>${arg0}-->
-    <!--</select>-->
+        ) full_result_set WHERE rownum<![CDATA[<=]]>${offset + rowCount}
+        ) WHERE rn>${offset}
+    </select>
 
     <select id="queryAllCount" resultType="int">
         SELECT count(1) FROM Goods
@@ -185,31 +195,31 @@
 
         SELECT * FROM Goods
         <where>
-            <if test="arg0.goodsId!=null">
-                AND goodsId=#{arg0.goodsId}
+            <if test="entity.goodsId!=null">
+                AND goodsId=#{entity.goodsId}
             </if>
-            <if test="arg0.goodsName!=null">
-                AND goodsName=#{arg0.goodsName}
+            <if test="entity.goodsName!=null">
+                AND goodsName=#{entity.goodsName}
             </if>
-            <if test="arg0.description!=null">
-                AND description=#{arg0.description}
+            <if test="entity.description!=null">
+                AND description=#{entity.description}
             </if>
-            <if test="arg0.remainCount!=null">
-                AND remainCount=#{arg0.remainCount}
+            <if test="entity.remainCount!=null">
+                AND remainCount=#{entity.remainCount}
             </if>
-            <if test="arg0.goodsCategory!=null">
-                AND goodsCategory=#{arg0.goodsCategory.categoryId}
+            <if test="entity.goodsCategory!=null">
+                AND goodsCategory=#{entity.goodsCategory.categoryId}
             </if>
-            <if test="arg0.shop!=null">
-                AND shop=#{arg0.shop.shopId}
+            <if test="entity.shop!=null">
+                AND shop=#{entity.shop.shopId}
             </if>
-            <if test="arg0.price!=null">
-                AND price=#{arg0.price}
+            <if test="entity.price!=null">
+                AND price=#{entity.price}
             </if>
         </where>
 
-        ) full_result_set WHERE rownum<![CDATA[<=]]>${arg1+arg2}
-        ) WHERE rn>${arg1}
+        ) full_result_set WHERE rownum<![CDATA[<=]]>${offset + rowCount}
+        ) WHERE rn>${offset}
     </select>
 
     <select id="queryCount" resultType="int">

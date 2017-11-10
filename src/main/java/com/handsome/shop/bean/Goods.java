@@ -25,7 +25,7 @@ public class Goods {
     private Shop shop;//Shop外键，所属的商店
     @OneToMany
     private List<GoodsImage> goodsImageList;
-    private double price;
+    private Double price;
     @OneToMany
     private List<AttrName> attrNameList;
     @OneToMany
@@ -44,7 +44,7 @@ public class Goods {
         this.goodsId = goodsId;
     }
 
-    public Goods(String goodsName, String description, Integer remainCount, GoodsCategory goodsCategory, Shop shop, double price) {
+    public Goods(String goodsName, String description, Integer remainCount, GoodsCategory goodsCategory, Shop shop, Double price) {
         this.goodsName = goodsName;
         this.description = description;
         this.remainCount = remainCount;
@@ -85,11 +85,11 @@ public class Goods {
         this.shop = shop;
     }
 
-    public double getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(Double price) {
         this.price = price;
     }
 

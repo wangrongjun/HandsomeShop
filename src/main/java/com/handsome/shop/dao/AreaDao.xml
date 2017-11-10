@@ -83,8 +83,8 @@
 
         SELECT * FROM Area
 
-        ) full_result_set WHERE rownum<![CDATA[<=]]>${arg0+arg1}
-        ) WHERE rn>${arg0}
+        ) full_result_set WHERE rownum<![CDATA[<=]]>${offset + rowCount}
+        ) WHERE rn>${offset}
     </select>
 
     <select id="queryAllCount" resultType="int">
@@ -101,19 +101,19 @@
 
         SELECT * FROM Area
         <where>
-            <if test="arg0.areaId!=null">
-                AND areaId=#{arg0.areaId}
+            <if test="entity.areaId!=null">
+                AND areaId=#{entity.areaId}
             </if>
-            <if test="arg0.areaName!=null">
-                AND areaName=#{arg0.areaName}
+            <if test="entity.areaName!=null">
+                AND areaName=#{entity.areaName}
             </if>
-            <if test="arg0.parent!=null">
-                AND parent=#{arg0.parent.areaId}
+            <if test="entity.parent!=null">
+                AND parent=#{entity.parent.areaId}
             </if>
         </where>
 
-        ) full_result_set WHERE rownum<![CDATA[<=]]>${arg1+arg2}
-        ) WHERE rn>${arg1}
+        ) full_result_set WHERE rownum<![CDATA[<=]]>${offset + rowCount}
+        ) WHERE rn>${offset}
     </select>
 
     <select id="queryCount" resultType="int">

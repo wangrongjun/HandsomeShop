@@ -20,16 +20,16 @@ public class CreateMapperAndDaoClass {
         File[] files = new File(beanDir).listFiles(pathname -> pathname.getName().endsWith(".java"));
         assert files != null;
         for (File file : files) {
-            String beanSimpleName = TextUtil.getTextExceptLastPoint(file.getName());
-            if (!beanSimpleName.equals("GoodsCategory")) {
+            if (!file.getName().equals("GoodsCategory.java")) {
                 continue;
             }
+            String beanSimpleName = TextUtil.getTextExceptLastPoint(file.getName());
             String beanName = "com.handsome.shop.bean." + beanSimpleName;
             String daoSimpleName = beanSimpleName + "Dao";
             String daoName = "com.handsome.shop.dao." + daoSimpleName;
 
             Class beanClass = Class.forName(beanName);
-//            new MybatisCreator().createMapper(beanClass, daoName, new FileWriter(daoDir + daoSimpleName + ".xml"));
+            new MybatisCreator().createMapper(beanClass, daoName, new FileWriter(daoDir + daoSimpleName + ".xml"));
 //            new MybatisCreator().setCreateAnno(true).
 //                    createDao(beanClass, daoName, new FileWriter(daoDir + daoSimpleName + ".java"));
         }
